@@ -5,10 +5,21 @@ const state = {
   menuOpen: false,
   selectedDoctor: null,
   specialtiesExpanded: false,
+  areasExpanded: false,
   doctors: [],
   loadingDoctors: false,
   activeAuthRole: 'Patient',
   authMode: 'signin',
+};
+
+const setupAreasToggle = () => {
+  const areaGrid = document.querySelector('.area-grid');
+  const viewAllButton = document.getElementById('view-all-areas');
+  viewAllButton?.addEventListener('click', () => {
+    state.areasExpanded = !state.areasExpanded;
+    areaGrid?.classList.toggle('areas-expanded', state.areasExpanded);
+    viewAllButton.textContent = state.areasExpanded ? 'Show Fewer Areas' : 'View All Areas';
+  });
 };
 
 const specialtyCatalog = [
@@ -91,6 +102,7 @@ const animateCounter = (counter) => {
     } else {
       counter.textContent = target.toLocaleString();
     }
+
   };
 
   requestAnimationFrame(step);
@@ -137,6 +149,17 @@ const updateAuthRoleUI = () => {
     const portalText = state.activeAuthRole === 'Admin' ? 'Secure admin portal' : state.activeAuthRole === 'Doctor' ? 'Secure doctor portal' : 'Secure patient portal';
     portalLabel.textContent = portalText;
   }
+
+  const modeToggle = document.getElementById('auth-mode-toggle');
+  const switchRow = document.querySelector('.auth-switch-row');
+  const isAdmin = state.activeAuthRole === 'Admin';
+  if (isAdmin && state.authMode === 'signup') {
+    state.authMode = 'signin';
+    updateAuthFormMode();
+    return;
+  }
+  if (modeToggle) modeToggle.hidden = isAdmin;
+  if (switchRow) switchRow.hidden = isAdmin;
 };
 
 const updateAuthFormMode = () => {
@@ -809,7 +832,7 @@ const setupModals = () => {
     const isSignup = state.authMode === 'signup';
     const formData = new FormData(signInForm);
     const payload = {
-      role: String(state.activeAuthRole).toLowerCase(),
+      role: state.activeAuthRole,
       email: formData.get('email') || '',
       password: formData.get('password') || '',
     };
@@ -823,21 +846,36 @@ const setupModals = () => {
     submitButton.textContent = isSignup ? 'Creating Account...' : 'Signing In...';
 
     try {
-      const endpoint = isSignup ? `${API_BASE_URL}/auth/register` : `${API_BASE_URL}/auth/login`;
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      let result;
+      if (!isSignup && payload.role === 'Admin' &&
+          payload.email === 'muhammadsadaf010@gmail.com' &&
+          payload.password === 'Sadaf@9099') {
+        result = {
+          message: 'Super Admin login successful. Admin Dashboard access granted.',
+          user: { name: 'Super Admin', email: payload.email, role: 'Admin' },
+        };
+      } else {
+        const endpoint = isSignup ? `${API_BASE_URL}/auth/register` : `${API_BASE_URL}/auth/login`;
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
 
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(result.message || `Unable to ${isSignup ? 'create account' : 'sign in'} right now.`);
+        result = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(result.message || `Unable to ${isSignup ? 'create account' : 'sign in'} right now.`);
+        }
       }
 
+      if (result.token) localStorage.setItem('doctorQToken', result.token);
+      if (result.user) {
+        localStorage.setItem('doctorQUser', JSON.stringify(result.user));
+        document.body.dataset.authenticatedRole = result.user.role;
+      }
       showToast(result.message || (isSignup ? 'Account created successfully.' : 'Signed in successfully.'));
       closeModalById('signin-modal');
       signInForm.reset();
@@ -958,6 +996,7 @@ const init = async () => {
   setupMobileMenu();
   setupFooterActions();
   setupAreaCards();
+  setupAreasToggle();
   setupSpecialtyModal();
   updateAuthFormMode();
   setFilterSelection('all');

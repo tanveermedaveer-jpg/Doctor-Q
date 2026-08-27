@@ -12,6 +12,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/doctorq';
 const JWT_SECRET = process.env.JWT_SECRET || 'doctorq-secret-key';
+const SUPER_ADMIN_EMAIL = 'muhammadsadaf010@gmail.com';
+const SUPER_ADMIN_PASSWORD = 'Sadaf@9099';
 
 app.use(cors());
 app.use(express.json());
@@ -88,7 +90,11 @@ app.post('/api/auth/register', async (req, res) => {
       return res.status(400).json({ message: 'Name, email, and password are required.' });
     }
 
-    const normalizedRole = ['Patient', 'Doctor', 'Admin'].includes(role) ? role : 'Patient';
+    const normalizedRole = ['Patient', 'Doctor', 'Admin'].find((allowedRole) => allowedRole.toLowerCase() === String(role || '').toLowerCase()) || 'Patient';
+
+    if (normalizedRole === 'Admin') {
+      return res.status(403).json({ message: 'Admin registration is restricted to the Super Admin.' });
+    }
 
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
@@ -132,13 +138,32 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(400).json({ message: 'Email and password are required.' });
     }
 
+    if (String(email).toLowerCase() === SUPER_ADMIN_EMAIL &&
+        String(password) === SUPER_ADMIN_PASSWORD &&
+        String(role || '').toLowerCase() === 'admin') {
+      const token = jwt.sign({ id: 'super-admin', role: 'Admin' }, JWT_SECRET, { expiresIn: '7d' });
+      return res.json({
+        message: 'Super Admin login successful. Admin Dashboard access granted.',
+        token,
+        user: {
+          id: 'super-admin',
+          name: 'Super Admin',
+          email: SUPER_ADMIN_EMAIL,
+          phone: '',
+          role: 'Admin',
+        },
+      });
+    }
+
     const user = await User.findOne({ email: String(email).toLowerCase() });
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
-    const requestedRole = role || user.role;
-    if (requestedRole && user.role !== requestedRole && requestedRole !== user.role) {
+    const requestedRole = role
+      ? ['Patient', 'Doctor', 'Admin'].find((allowedRole) => allowedRole.toLowerCase() === String(role).toLowerCase())
+      : user.role;
+    if (requestedRole && user.role !== requestedRole) {
       return res.status(403).json({ message: 'Role mismatch for this account.' });
     }
 

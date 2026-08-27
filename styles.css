@@ -13,8 +13,20 @@
   --radius-md: 18px;
 }
 
-* {
+html,
+body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
 }
 
 html {
@@ -32,6 +44,7 @@ body {
 
 img {
   max-width: 100%;
+  height: auto;
   display: block;
 }
 
@@ -45,7 +58,8 @@ select {
 }
 
 .container {
-  width: min(1200px, calc(100% - 32px));
+  width: 90%;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -616,9 +630,19 @@ select {
 
 .area-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 16px;
   margin-top: 0;
+}
+
+.areas-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.view-all-areas {
+  min-width: 180px;
 }
 
 .area-card {
@@ -641,7 +665,7 @@ select {
 
 .specialty-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 24px;
 }
 
@@ -776,6 +800,17 @@ select {
   justify-content: center;
   gap: 12px;
   margin-bottom: 28px;
+}
+
+.doctor-filter {
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.doctor-filter::-webkit-scrollbar {
+  display: none;
 }
 
 .filter-tab {
@@ -1003,8 +1038,9 @@ select {
 
 .modal-panel {
   position: relative;
-  width: min(760px, 100%);
-  max-height: calc(100vh - 32px);
+  width: 90vw;
+  max-width: 420px;
+  max-height: 90vh;
   overflow-y: auto;
   background: rgba(255, 255, 255, 0.97);
   border: 1px solid rgba(15, 157, 138, 0.1);
@@ -1469,11 +1505,11 @@ textarea:focus {
   }
 
   .specialty-grid {
-    grid-template-columns: repeat(2, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
 
   .doctor-grid {
-    grid-template-columns: repeat(2, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 
   .search-panel {
@@ -1499,13 +1535,60 @@ textarea:focus {
   }
 
   .footer-grid {
-    grid-template-columns: repeat(2, minmax(220px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-grid,
+  .area-grid,
+  .specialty-grid,
+  .doctor-grid,
+  .stats,
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-panel,
+  .form-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .cta-row,
+  .modal-actions,
+  .modal-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cta-row .btn,
+  .modal-actions .btn {
+    width: 100%;
+  }
+
+  .nav {
+    width: 90%;
+    max-width: 1200px;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+
+  .brand-text {
+    min-width: 0;
+  }
+
+  .brand-name {
+    white-space: nowrap;
   }
 }
 
 @media (max-width: 640px) {
   .container {
-    width: min(100% - 20px, 1200px);
+    width: 90%;
   }
 
   .nav {
@@ -1641,6 +1724,15 @@ textarea:focus {
     scrollbar-width: none;
   }
 
+  .area-grid:not(.areas-expanded) .extra-area {
+    display: none;
+  }
+
+  .area-card {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   .doctor-filter::-webkit-scrollbar {
     display: none;
   }
@@ -1665,7 +1757,20 @@ textarea:focus {
 
   .modal-panel {
     padding: 1rem;
-    max-height: calc(100vh - 20px);
+    width: 90vw;
+    max-width: 420px;
+    max-height: 90vh;
+  }
+
+  .auth-role-tabs {
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .auth-role-tab {
+    min-width: 0;
+    padding: 0.7rem 0.35rem;
+    font-size: clamp(0.72rem, 3.2vw, 0.9rem);
   }
 
   .modal-header {
@@ -1709,5 +1814,59 @@ textarea:focus {
 
   .hero-content h1 {
     letter-spacing: -0.05em;
+  }
+
+  .modal-overlay {
+    padding: 10px;
+  }
+
+  .modal-panel {
+    width: 90vw;
+    border-radius: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    width: 90%;
+    gap: 6px;
+  }
+
+  .nav-actions {
+    gap: 4px;
+  }
+
+  .nav-actions .btn {
+    padding: 0.62rem 0.65rem;
+    font-size: 0.7rem;
+  }
+
+  .nav-actions .nav-book-btn {
+    display: none;
+  }
+
+  .menu-toggle {
+    flex: 0 0 40px;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(2rem, 11vw, 2.8rem);
+  }
+
+  .search-panel {
+    padding: 0.75rem;
+  }
+
+  .photo-frame img {
+    min-height: 0;
+  }
+
+  .modal-overlay {
+    padding: 10px;
+  }
+
+  .modal-panel {
+    width: 90vw;
+    max-width: 420px;
   }
 }

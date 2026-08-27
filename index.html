@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Doctor Q | Healthcare Platform</title>
     <meta
       name="description"
@@ -184,8 +184,11 @@
               <button type="button" class="area-card" data-area="Thall Road">Thall Road</button>
               <button type="button" class="area-card" data-area="Zafarabad">Zafarabad</button>
               <button type="button" class="area-card" data-area="Cantonment">Cantonment</button>
-              <button type="button" class="area-card" data-area="City Hospital D.I. Khan">City Hospital D.I. Khan</button>
-              <button type="button" class="area-card" data-area="DHQ Hospital D.I. Khan">DHQ Hospital D.I. Khan</button>
+              <button type="button" class="area-card extra-area" data-area="City Hospital D.I. Khan">City Hospital D.I. Khan</button>
+              <button type="button" class="area-card extra-area" data-area="DHQ Hospital D.I. Khan">DHQ Hospital D.I. Khan</button>
+            </div>
+            <div class="areas-actions">
+              <button type="button" class="btn btn-secondary view-all-areas" id="view-all-areas">View All Areas</button>
             </div>
           </div>
         </section>
@@ -609,7 +612,7 @@
 
                 <label>
                   <span>Email Address</span>
-                  <input type="email" name="email" placeholder="name@example.com" required />
+                  <input type="email" name="email" placeholder="Enter your email" autocomplete="email" required />
                 </label>
                 <label>
                   <span>Password</span>
