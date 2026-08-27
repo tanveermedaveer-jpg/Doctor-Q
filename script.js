@@ -9,7 +9,7 @@ const state = {
   doctors: [],
   adminDoctors: [],
   loadingDoctors: false,
-  activeAuthRole: 'Patient',
+  activeAuthRole: 'Admin',
   authMode: 'signin',
   currentUser: null,
   appointments: [],
@@ -28,7 +28,7 @@ const homepageSections = [
   '.testimonials-section',
   '.emergency-footer',
 ];
-const dashboardIds = ['admin-dashboard', 'doctor-dashboard', 'patient-dashboard'];
+const dashboardIds = ['admin-dashboard', 'doctor-dashboard'];
 const ADMIN_EMAIL = 'muhammadsadaf010@gmail.com';
 const ADMIN_PASSWORD = 'Sadaf@9099';
 
@@ -75,8 +75,8 @@ const updateAuthenticatedNavigation = (user = null) => {
     <a href="#contact-section" data-scroll-target="contact-section">Contact Us</a>
     <a href="#blog-section" data-scroll-target="blog-section">Blog</a>
   `;
-  navActions.innerHTML = '<button class="btn btn-ghost sign-in-btn" type="button" data-modal-target="signin-modal">Sign In</button><button class="btn btn-primary nav-book-btn" type="button" data-scroll-target="doctor-listings">Appointment</button>';
-  if (mobileMenu) mobileMenu.innerHTML = '<details class="mobile-nav-dropdown"><summary>Home <span aria-hidden="true">⌄</span></summary><a href="#top" data-scroll-target="top">Overview</a><a href="#about-section" data-scroll-target="about-section">About Doctor Q</a><a href="#contact-section" data-scroll-target="contact-section">Contact Us</a></details><a href="#specialty-section" data-scroll-target="specialty-section">Services</a><a href="#about-section" data-scroll-target="about-section">About</a><a href="#doctor-listings" data-scroll-target="doctor-listings">Team</a><a href="#blog-section" data-scroll-target="blog-section">Blog</a><a href="#contact-section" data-scroll-target="contact-section">Contact Us</a>';
+  navActions.innerHTML = '<button class="btn btn-ghost sign-in-btn" type="button" data-modal-target="signin-modal">Admin / Doctor Portal Login</button><button class="btn btn-primary nav-book-btn" type="button" data-scroll-target="doctor-listings">Appointment</button>';
+  if (mobileMenu) mobileMenu.innerHTML = '<details class="mobile-nav-dropdown"><summary>Home <span aria-hidden="true">⌄</span></summary><a href="#top" data-scroll-target="top">Overview</a><a href="#about-section" data-scroll-target="about-section">About Doctor Q</a><a href="#contact-section" data-scroll-target="contact-section">Contact Us</a></details><a href="#specialty-section" data-scroll-target="specialty-section">Services</a><a href="#about-section" data-scroll-target="about-section">About</a><a href="#doctor-listings" data-scroll-target="doctor-listings">Team</a><a href="#blog-section" data-scroll-target="blog-section">Blog</a><a href="#contact-section" data-scroll-target="contact-section">Contact Us</a><button type="button" class="mobile-portal-login" data-modal-target="signin-modal">Admin / Doctor Portal Login</button>';
   setupNavigation();
 };
 
@@ -393,7 +393,7 @@ const openModalById = (id) => {
 
   if (id === 'signin-modal') {
     state.authMode = 'signin';
-    state.activeAuthRole = 'Patient';
+    state.activeAuthRole = 'Admin';
     updateAuthFormMode();
   }
 
@@ -929,14 +929,14 @@ const renderAppointmentsTable = (selector, appointments, role) => {
   }
   body.innerHTML = appointments.map((appointment) => {
     const id = appointment.id || appointment._id || '';
-    const action = role === 'patient'
-      ? `<button type="button" class="table-link cancel-appointment" data-id="${id}">Cancel</button>`
-      : `<select class="status-select" data-id="${id}"><option ${appointment.status === 'Pending' ? 'selected' : ''}>Pending</option><option ${appointment.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option><option ${appointment.status === 'Completed' ? 'selected' : ''}>Completed</option><option ${appointment.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option><option ${appointment.status === 'Rejected' ? 'selected' : ''}>Rejected</option></select>`;
+      const action = `<select class="status-select" data-id="${id}"><option ${appointment.status === 'Pending' ? 'selected' : ''}>Pending</option><option ${appointment.status === 'Confirmed' ? 'selected' : ''}>Approved</option><option ${appointment.status === 'Completed' ? 'selected' : ''}>Completed</option><option ${appointment.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option></select>`;
     if (role === 'admin') {
       return `<tr><td><strong>${appointment.patientName}</strong><small>${appointment.patientPhone || ''}</small></td><td>${appointment.doctorName}</td><td>${appointmentDate(appointment)}</td><td>${statusBadge(appointment.status)}</td><td>${action}</td></tr>`;
     }
     if (role === 'doctor') {
-      return `<tr><td><strong>${appointment.patientName}</strong></td><td>${appointmentDate(appointment)}</td><td>${appointment.patientPhone || appointment.patientEmail || '—'}</td><td>${statusBadge(appointment.status)}</td><td>${action}</td></tr>`;
+      const phone = String(appointment.patientPhone || '').replace(/\D/g, '');
+      const whatsapp = phone ? `<a class="table-link whatsapp-link" href="https://wa.me/${phone}" target="_blank" rel="noopener">WhatsApp</a>` : '';
+      return `<tr><td><strong>${appointment.patientName}</strong></td><td>${appointmentDate(appointment)}</td><td>${appointment.patientPhone || appointment.patientEmail || '—'} ${whatsapp}</td><td>${statusBadge(appointment.status)}</td><td>${action}</td></tr>`;
     }
     return `<tr><td>${appointment.doctorName}</td><td>${appointmentDate(appointment)}</td><td>${appointment.specialty || '—'}</td><td>${statusBadge(appointment.status)}</td><td>${action}</td></tr>`;
   }).join('');
@@ -960,14 +960,17 @@ const loadAdminDashboard = async () => {
   const count = document.getElementById('admin-doctor-count');
   const patients = document.getElementById('admin-patient-count');
   const pending = document.getElementById('admin-pending-count');
+  const total = document.getElementById('admin-appointment-count');
   if (count) count.textContent = state.adminDoctors.length;
   if (patients) patients.textContent = getStored('doctorQUsers', []).filter((user) => user.role === 'Patient').length;
   if (pending) pending.textContent = appointments.filter((item) => String(item.status).toLowerCase() === 'pending').length;
+  if (total) total.textContent = appointments.length;
   try {
     const stats = await apiRequest('/admin/stats');
     if (count) count.textContent = stats.doctors;
     if (patients) patients.textContent = stats.patients;
     if (pending) pending.textContent = stats.pendingAppointments;
+    if (total) total.textContent = stats.totalAppointments ?? appointments.length;
   } catch (error) {}
 };
 
@@ -1029,7 +1032,7 @@ const openDoctorEditor = (doctor) => {
   const form = document.getElementById('edit-doctor-form');
   if (!form || !doctor) return;
   state.editingDoctorId = String(doctor.id);
-  ['doctorId', 'name', 'specialty', 'hospital', 'fee', 'timing', 'image', 'webhookUrl'].forEach((name) => {
+  ['doctorId', 'name', 'specialty', 'hospital', 'fee', 'timing', 'image', 'webhookUrl', 'active'].forEach((name) => {
     const input = form.elements[name];
     if (input) input.value = name === 'doctorId' ? doctor.id : name === 'timing' ? doctor.timings : name === 'hospital' ? doctor.clinic : (doctor[name] ?? '');
   });
@@ -1062,6 +1065,7 @@ const setupDoctorEditor = () => {
       timing: String(formData.get('timing') || '').trim(),
       image: imageFile || String(formData.get('image') || '').trim() || doctor.image,
       webhookUrl: String(formData.get('webhookUrl') || '').trim(),
+      active: formData.get('active') !== 'false',
     };
     try { await apiRequest(`/doctors/${doctor.id}`, { method: 'PUT', body: JSON.stringify(changes) }); } catch (error) {}
     Object.assign(doctor, changes, { clinic: changes.hospital, area: changes.hospital, timings: changes.timing });

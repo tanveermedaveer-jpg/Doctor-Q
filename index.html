@@ -69,7 +69,7 @@
           </nav>
 
           <div class="nav-actions">
-            <button class="btn btn-ghost sign-in-btn" type="button" data-modal-target="signin-modal">Sign In</button>
+            <button class="btn btn-ghost sign-in-btn" type="button" data-modal-target="signin-modal">Admin / Doctor Portal Login</button>
             <button class="btn btn-primary nav-book-btn" type="button" data-scroll-target="doctor-listings">Appointment</button>
           </div>
 
@@ -632,7 +632,7 @@
             </div>
             <div class="admin-dashboard-grid dashboard-stats">
               <article class="admin-stat-card"><span>Total Doctors</span><strong id="admin-doctor-count">0</strong></article>
-              <article class="admin-stat-card"><span>Registered Patients</span><strong id="admin-patient-count">—</strong></article>
+              <article class="admin-stat-card"><span>Total Appointments</span><strong id="admin-appointment-count">0</strong></article>
               <article class="admin-stat-card"><span>Pending Appointments</span><strong id="admin-pending-count">0</strong></article>
             </div>
             <div class="dashboard-columns">
@@ -650,6 +650,7 @@
                     <label><span>Image URL</span><input type="url" name="image" placeholder="https://example.com/doctor.jpg" /></label>
                     <label><span>Image file</span><input type="file" name="imageFile" accept="image/*" /></label>
                     <label class="full-width"><span>Google Sheet Webhook URL</span><input type="url" name="webhookUrl" placeholder="Enter Doctor's Google Sheet / AppScript URL" /></label>
+                    <label><span>Availability</span><select name="active"><option value="true">Available</option><option value="false">Unavailable</option></select></label>
                   </div>
                   <button class="btn btn-primary" type="submit">Add Doctor &amp; Generate Credentials</button>
                 </form>
@@ -686,13 +687,6 @@
               </div>
             </article>
             <article class="dashboard-card"><div class="card-heading"><div><span class="section-kicker small">Schedule</span><h3>My Appointments</h3></div></div><div class="table-scroll"><table class="data-table" id="doctor-appointments-table"><thead><tr><th>Patient</th><th>Date &amp; time</th><th>Contact</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td colspan="5">Loading appointments…</td></tr></tbody></table></div></article>
-          </div>
-        </section>
-
-        <section class="dashboard hidden" id="patient-dashboard" aria-hidden="true">
-          <div class="container">
-            <div class="dashboard-heading"><div><span class="section-kicker">Patient Portal</span><h2 id="patient-dashboard-title">My Dashboard</h2><p>Track your appointments and book trusted local care.</p></div><button type="button" class="btn btn-primary patient-book-btn" data-scroll-target="doctor-listings">Book an appointment</button></div>
-            <article class="dashboard-card"><div class="card-heading"><div><span class="section-kicker small">Your care</span><h3>My Appointments</h3></div></div><div class="table-scroll"><table class="data-table" id="patient-appointments-table"><thead><tr><th>Doctor</th><th>Date &amp; time</th><th>Specialty</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td colspan="5">Loading appointments…</td></tr></tbody></table></div></article>
           </div>
         </section>
 
@@ -781,23 +775,12 @@
             </div>
 
             <div class="auth-role-tabs" aria-label="Select account role">
-              <button type="button" class="auth-role-tab active" data-role="Patient">Patient</button>
               <button type="button" class="auth-role-tab" data-role="Doctor">Doctor</button>
-              <button type="button" class="auth-role-tab" data-role="Admin">Admin</button>
+              <button type="button" class="auth-role-tab active" data-role="Admin">Admin</button>
             </div>
 
             <form id="signin-form" class="booking-form auth-form">
               <div class="form-grid single-column">
-                <label class="auth-field auth-field-signup hidden">
-                  <span>Full Name</span>
-                  <input type="text" name="fullName" placeholder="Enter full name" />
-                </label>
-
-                <label class="auth-field auth-field-signup hidden">
-                  <span>Phone Number</span>
-                  <input type="tel" name="phoneNumber" placeholder="03xx-xxxxxxx" />
-                </label>
-
                 <label>
                   <span>Email Address</span>
                   <input type="email" name="email" placeholder="Enter your email" autocomplete="email" required />
@@ -807,12 +790,8 @@
                   <div class="password-input"><input type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required /><button type="button" class="password-toggle" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" /><circle cx="12" cy="12" r="2.5" /></svg></button></div>
                 </label>
               </div>
-              <div class="auth-switch-row">
-                <span class="auth-switch-text">Don't have an account?</span>
-                <button type="button" class="auth-switch-btn" id="auth-mode-toggle">Sign Up</button>
-              </div>
               <div class="modal-footer">
-                <div class="fee-box" id="auth-portal-label">Secure patient portal</div>
+                <div class="fee-box" id="auth-portal-label">Secure admin portal</div>
                 <div class="modal-actions">
                   <button type="button" class="btn btn-secondary close-modal-btn">Cancel</button>
                   <button type="submit" class="btn btn-primary" id="auth-submit-btn">Sign In</button>
@@ -850,6 +829,7 @@
                       <label><span>Image URL</span><input type="url" name="image" placeholder="https://example.com/doctor.jpg" /></label>
                       <label><span>Image file</span><input type="file" name="imageFile" accept="image/*" /></label>
                       <label class="full-width"><span>Google Sheet Webhook URL</span><input type="url" name="webhookUrl" placeholder="Enter Doctor's Google Sheet / AppScript URL" /></label>
+                      <label><span>Availability</span><select name="active"><option value="true">Available</option><option value="false">Unavailable</option></select></label>
                     </div>
                     <datalist id="edit-specialty-options"></datalist>
                     <datalist id="edit-area-options"></datalist>

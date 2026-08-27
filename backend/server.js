@@ -346,12 +346,13 @@ app.get('/api/appointments', async (req, res) => {
 
 app.get('/api/admin/stats', async (req, res) => {
   try {
-    const [doctors, patients, pendingAppointments] = await Promise.all([
+    const [doctors, patients, pendingAppointments, totalAppointments] = await Promise.all([
       Doctor.countDocuments(),
       User.countDocuments({ role: 'Patient' }),
       Appointment.countDocuments({ status: 'Pending' }),
+      Appointment.countDocuments(),
     ]);
-    return res.json({ doctors, patients, pendingAppointments });
+    return res.json({ doctors, patients, pendingAppointments, totalAppointments });
   } catch (error) {
     return res.status(500).json({ message: 'Unable to fetch dashboard statistics.' });
   }
