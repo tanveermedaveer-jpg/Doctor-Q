@@ -48,6 +48,10 @@ img {
   display: block;
 }
 
+.hidden {
+  display: none !important;
+}
+
 button,
 select {
   font: inherit;
@@ -282,6 +286,10 @@ select {
   position: relative;
   padding: 54px 0 72px;
   overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(240, 253, 250, 0.85) 100%),
+    url("hero-doctor.jpg") no-repeat center right / cover,
+    url("https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=1400&q=80") no-repeat center right / cover;
 }
 
 .hero-bg {
@@ -290,6 +298,43 @@ select {
   background:
     radial-gradient(circle at top right, rgba(77, 190, 170, 0.18), transparent 25%),
     radial-gradient(circle at bottom left, rgba(15, 157, 138, 0.15), transparent 28%);
+}
+
+.admin-dashboard.hidden {
+  display: none;
+}
+
+.admin-dashboard {
+  min-height: calc(100vh - 86px);
+  padding: 72px 0;
+}
+
+.admin-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.admin-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 1.4rem;
+  border: 1px solid rgba(15, 157, 138, 0.1);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 20px 32px rgba(14, 60, 54, 0.06);
+}
+
+.admin-stat-card span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.admin-stat-card strong {
+  color: var(--primary-dark);
+  font-size: 2rem;
 }
 
 .hero-grid {
@@ -1584,6 +1629,22 @@ textarea:focus {
   .brand-name {
     white-space: nowrap;
   }
+
+  .hero {
+    background-position: center;
+  }
+
+  .hero-grid {
+    display: block;
+  }
+
+  .admin-dashboard {
+    padding: 48px 0;
+  }
+
+  .admin-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1851,6 +1912,13 @@ textarea:focus {
 
   .hero-content h1 {
     font-size: clamp(2rem, 11vw, 2.8rem);
+  }
+
+  .hero {
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.88) 100%),
+      url("hero-doctor.jpg") no-repeat center / cover,
+      url("https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=1400&q=80") no-repeat center / cover;
   }
 
   .search-panel {

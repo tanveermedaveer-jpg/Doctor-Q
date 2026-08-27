@@ -12,6 +12,55 @@ const state = {
   authMode: 'signin',
 };
 
+const homepageSections = ['.hero', '.areas-section', '.specialties', '.featured-doctors', '.emergency-footer'];
+
+const updateAdminNavigation = (isAdmin) => {
+  const navActions = document.querySelector('.nav-actions');
+  const mainNav = document.querySelector('.main-nav');
+  if (!navActions || !mainNav) return;
+
+  if (isAdmin) {
+    mainNav.innerHTML = '<a href="#admin-dashboard" data-scroll-target="admin-dashboard">Admin Dashboard</a>';
+    navActions.innerHTML = `
+      <button class="btn btn-primary admin-dashboard-nav-btn" type="button" data-scroll-target="admin-dashboard">Admin Dashboard</button>
+      <button class="btn btn-ghost sign-out-btn" type="button">Sign Out</button>
+    `;
+    navActions.querySelector('.sign-out-btn')?.addEventListener('click', exitAdminDashboard);
+    setupNavigation();
+    return;
+  }
+
+  mainNav.innerHTML = `
+    <a href="#top" data-scroll-target="top">Home</a>
+    <a href="#specialty-section" data-scroll-target="specialty-section">Specialists</a>
+    <a href="#areas-section" data-scroll-target="areas-section">Hospitals</a>
+    <a href="#doctor-listings" data-scroll-target="doctor-listings">Reviews</a>
+    <a href="#emergency-footer" data-scroll-target="emergency-footer">Support</a>
+  `;
+  navActions.innerHTML = '<button class="btn btn-ghost sign-in-btn" type="button" data-modal-target="signin-modal">Sign In</button><button class="btn btn-primary nav-book-btn" type="button" data-scroll-target="doctor-listings">Book Now</button>';
+  setupNavigation();
+};
+
+const enterAdminDashboard = () => {
+  localStorage.setItem('adminToken', 'true');
+  homepageSections.forEach((selector) => document.querySelector(selector)?.classList.add('hidden'));
+  const dashboard = document.getElementById('admin-dashboard');
+  dashboard?.classList.remove('hidden');
+  dashboard?.setAttribute('aria-hidden', 'false');
+  updateAdminNavigation(true);
+  scrollToSection('admin-dashboard');
+};
+
+function exitAdminDashboard() {
+  localStorage.removeItem('adminToken');
+  homepageSections.forEach((selector) => document.querySelector(selector)?.classList.remove('hidden'));
+  const dashboard = document.getElementById('admin-dashboard');
+  dashboard?.classList.add('hidden');
+  dashboard?.setAttribute('aria-hidden', 'true');
+  updateAdminNavigation(false);
+  scrollToSection('top');
+}
+
 const setupAreasToggle = () => {
   const areaGrid = document.querySelector('.area-grid');
   const viewAllButton = document.getElementById('view-all-areas');
@@ -872,6 +921,11 @@ const setupModals = () => {
       }
 
       if (result.token) localStorage.setItem('doctorQToken', result.token);
+      if (!isSignup && payload.role === 'Admin' &&
+          payload.email === 'muhammadsadaf010@gmail.com' &&
+          payload.password === 'Sadaf@9099') {
+        enterAdminDashboard();
+      }
       if (result.user) {
         localStorage.setItem('doctorQUser', JSON.stringify(result.user));
         document.body.dataset.authenticatedRole = result.user.role;
@@ -1000,6 +1054,10 @@ const init = async () => {
   setupSpecialtyModal();
   updateAuthFormMode();
   setFilterSelection('all');
+
+  if (localStorage.getItem('adminToken') === 'true') {
+    enterAdminDashboard();
+  }
 
   try {
     setDoctorLoadingState(true);
