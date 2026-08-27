@@ -19,6 +19,14 @@ const dashboardIds = ['admin-dashboard', 'doctor-dashboard', 'patient-dashboard'
 const ADMIN_EMAIL = 'muhammadsadaf010@gmail.com';
 const ADMIN_PASSWORD = 'Sadaf@9099';
 
+const setupMobileSplash = () => {
+  const splash = document.getElementById('mobile-splash-screen');
+  if (!splash || !window.matchMedia('(max-width: 767px)').matches) return;
+  window.setTimeout(() => {
+    splash.classList.add('is-hidden');
+  }, 2000);
+};
+
 const updateAuthenticatedNavigation = (user = null) => {
   const navActions = document.querySelector('.nav-actions');
   const mainNav = document.querySelector('.main-nav');
@@ -1290,6 +1298,7 @@ const setupSpecialtyModal = () => {
 };
 
 const init = async () => {
+  setupMobileSplash();
   renderSpecialties();
   setupNavigation();
   setupBookButtons();
