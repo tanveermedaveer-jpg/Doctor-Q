@@ -42,6 +42,7 @@ const doctorSchema = new mongoose.Schema(
     fee: { type: Number, default: 1500 },
     timing: { type: String, default: '09:00 AM - 05:00 PM' },
     image: { type: String, default: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=700&q=80' },
+    webhookUrl: { type: String, default: '' },
     active: { type: Boolean, default: true },
   },
   { timestamps: true }
@@ -240,7 +241,7 @@ app.get('/api/doctors/search', async (req, res) => {
 
 app.post('/api/doctors', async (req, res) => {
   try {
-    const { name, specialty, qualification, hospital, fee, timing, timings, image, email, password, phone, active } = req.body;
+    const { name, specialty, qualification, hospital, fee, timing, timings, image, email, password, phone, active, webhookUrl } = req.body;
 
     if (!name || !specialty) {
       return res.status(400).json({ message: 'Doctor name and specialty are required.' });
@@ -263,6 +264,7 @@ app.post('/api/doctors', async (req, res) => {
       fee: Number(fee || 1500),
       timing: timing || timings || '09:00 AM - 05:00 PM',
       image: image || 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=700&q=80',
+      webhookUrl: webhookUrl || '',
       active: !['false', '0', 'inactive'].includes(String(active).toLowerCase()),
     });
 
@@ -390,7 +392,7 @@ app.delete('/api/appointments/:id', async (req, res) => {
 
 app.put('/api/doctors/:id', async (req, res) => {
   try {
-    const allowed = ['name', 'email', 'phone', 'specialty', 'qualification', 'hospital', 'fee', 'timing', 'timings', 'image', 'active'];
+    const allowed = ['name', 'email', 'phone', 'specialty', 'qualification', 'hospital', 'fee', 'timing', 'timings', 'image', 'active', 'webhookUrl'];
     const changes = {};
     allowed.forEach((key) => {
       if (req.body[key] !== undefined) changes[key] = key === 'fee'

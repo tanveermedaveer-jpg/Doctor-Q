@@ -552,6 +552,7 @@ const normalizeDoctorPayload = (doctor = {}) => {
     fee: feeValue,
     qualification: doctor.qualification || doctor.qualifications || doctor.degree || 'MBBS',
     timings: doctor.timings || doctor.timing || doctor.schedule || doctor.availableTime || 'Flexible',
+    webhookUrl: doctor.webhookUrl || doctor.googleSheetWebhookUrl || doctor.webhook || '',
     rating: ratingValue,
     image:
       doctor.image ||
@@ -1028,7 +1029,7 @@ const openDoctorEditor = (doctor) => {
   const form = document.getElementById('edit-doctor-form');
   if (!form || !doctor) return;
   state.editingDoctorId = String(doctor.id);
-  ['doctorId', 'name', 'specialty', 'hospital', 'fee', 'timing', 'image'].forEach((name) => {
+  ['doctorId', 'name', 'specialty', 'hospital', 'fee', 'timing', 'image', 'webhookUrl'].forEach((name) => {
     const input = form.elements[name];
     if (input) input.value = name === 'doctorId' ? doctor.id : name === 'timing' ? doctor.timings : name === 'hospital' ? doctor.clinic : (doctor[name] ?? '');
   });
@@ -1060,6 +1061,7 @@ const setupDoctorEditor = () => {
       fee: Number(formData.get('fee') || 0),
       timing: String(formData.get('timing') || '').trim(),
       image: imageFile || String(formData.get('image') || '').trim() || doctor.image,
+      webhookUrl: String(formData.get('webhookUrl') || '').trim(),
     };
     try { await apiRequest(`/doctors/${doctor.id}`, { method: 'PUT', body: JSON.stringify(changes) }); } catch (error) {}
     Object.assign(doctor, changes, { clinic: changes.hospital, area: changes.hospital, timings: changes.timing });
@@ -1371,14 +1373,24 @@ const setupModals = () => {
       };
 
       let result;
-      try {
-        result = await apiRequest('/appointments', { method: 'POST', body: JSON.stringify(payload) });
-      } catch (error) {
-        const localAppointment = { ...payload, id: `local-appointment-${Date.now()}`, status: 'Pending', createdAt: new Date().toISOString() };
-        saveAppointments([localAppointment, ...localAppointments()]);
-        result = { message: 'Appointment saved locally and will sync when available.', appointment: localAppointment };
+      if (doctor?.webhookUrl) {
+        const webhookResponse = await fetch(doctor.webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!webhookResponse.ok) throw new Error('Doctor webhook rejected the appointment.');
+        result = { message: `Appointment submitted directly to ${doctor.name}'s system!` };
+      } else {
+        try {
+          result = await apiRequest('/appointments', { method: 'POST', body: JSON.stringify(payload) });
+        } catch (error) {
+          const localAppointment = { ...payload, id: `local-appointment-${Date.now()}`, status: 'Pending', createdAt: new Date().toISOString() };
+          saveAppointments([localAppointment, ...localAppointments()]);
+          result = { message: 'Appointment saved locally and will sync when available.', appointment: localAppointment };
+        }
+        if (result.appointment) saveAppointments([result.appointment, ...localAppointments().filter((item) => String(item.id || item._id) !== String(result.appointment.id || result.appointment._id))]);
       }
-      if (result.appointment) saveAppointments([result.appointment, ...localAppointments().filter((item) => String(item.id || item._id) !== String(result.appointment.id || result.appointment._id))]);
 
       submitButton.textContent = 'Confirmed';
       showToast(result.message || `Appointment requested with ${doctor?.name || 'doctor'}.`);
