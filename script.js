@@ -1523,7 +1523,7 @@ const setupMobileMenu = () => {
   });
 
   window.addEventListener('resize', () => {
-    if (window.innerWidth > 980) setMenuState(false);
+    if (window.innerWidth > 991) setMenuState(false);
   });
 };
 

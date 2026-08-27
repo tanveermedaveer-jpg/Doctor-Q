@@ -1557,6 +1557,255 @@ textarea:focus {
     gap: 12px;
   }
 
+  @media (max-width: 991px) {
+    .main-nav,
+    .nav-actions {
+      display: none;
+    }
+
+    .nav {
+      min-height: 76px;
+      gap: 12px;
+      flex-wrap: nowrap;
+    }
+
+    .menu-toggle {
+      display: flex;
+      margin-left: auto;
+    }
+
+    .mobile-menu {
+      display: flex;
+      visibility: hidden;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease, opacity 0.25s ease, visibility 0.3s ease;
+    }
+
+    .mobile-menu.is-open {
+      visibility: visible;
+      max-height: 80vh;
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .container {
+      width: calc(100% - 32px);
+    }
+
+    /* Final mobile layout overrides */
+    @media (max-width: 991px) {
+      .main-nav,
+      .nav-actions {
+        display: none;
+      }
+
+      .nav {
+        min-height: 76px;
+        gap: 12px;
+        flex-wrap: nowrap;
+      }
+
+      .menu-toggle {
+        display: flex;
+        margin-left: auto;
+      }
+
+      .mobile-menu {
+        display: flex;
+        visibility: hidden;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.3s ease, opacity 0.25s ease, visibility 0.3s ease;
+      }
+
+      .mobile-menu.is-open {
+        visibility: visible;
+        max-height: 80vh;
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .container {
+        width: calc(100% - 32px);
+      }
+
+      .hero {
+        padding: 42px 0 58px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 22px;
+      }
+
+      .hero-content {
+        display: contents;
+      }
+
+      .hero-content .mini-badge { grid-row: 1; }
+      .hero-content h1 {
+        grid-row: 2;
+        max-width: 100%;
+        font-size: clamp(2rem, 9vw, 3rem);
+        text-align: left;
+      }
+      .hero-content .subheading { grid-row: 3; }
+      .hero-visual {
+        grid-row: 4;
+        min-height: min(105vw, 410px);
+        width: 100%;
+      }
+      .hero-content .search-panel {
+        grid-row: 5;
+        width: 100%;
+        grid-template-columns: 1fr;
+      }
+      .hero-content .search-panel .field,
+      .hero-content .search-panel input,
+      .hero-content .search-panel .search-btn {
+        width: 100%;
+        min-height: 52px;
+      }
+      .hero-content .search-panel .search-btn {
+        padding: 0.9rem 1rem;
+      }
+      .hero-content .cta-row { grid-row: 6; }
+      .hero-content .stats { grid-row: 7; }
+
+      .specialty-grid,
+      .doctor-grid,
+      .blog-grid,
+      .footer-grid,
+      .dashboard-columns,
+      .profile-grid,
+      .about-layout,
+      .contact-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-band {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-band > div + div {
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        border-left: 0;
+      }
+
+      .section-heading-row {
+        display: block;
+      }
+
+      .table-scroll {
+        max-width: 100%;
+        overflow-x: auto;
+      }
+    }
+
+    .hero {
+      padding: 42px 0 58px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    .hero-content {
+      display: contents;
+    }
+
+    .hero-content .mini-badge {
+      grid-row: 1;
+    }
+
+    .hero-content h1 {
+      grid-row: 2;
+      max-width: 100%;
+      font-size: clamp(2rem, 9vw, 3rem);
+      text-align: left;
+    }
+
+    .hero-content .subheading {
+      grid-row: 3;
+    }
+
+    .hero-visual {
+      grid-row: 4;
+      min-height: min(105vw, 410px);
+      width: 100%;
+    }
+
+    .hero-content .search-panel {
+      grid-row: 5;
+      width: 100%;
+      grid-template-columns: 1fr;
+    }
+
+    .hero-content .search-panel .field,
+    .hero-content .search-panel input,
+    .hero-content .search-panel .search-btn {
+      width: 100%;
+      min-height: 52px;
+    }
+
+    .hero-content .search-panel .search-btn {
+      padding: 0.9rem 1rem;
+    }
+
+    .hero-content .cta-row,
+    .hero-content .stats {
+      grid-row: 6;
+    }
+
+    .hero-content .stats {
+      grid-row: 7;
+    }
+
+    .specialty-grid,
+    .doctor-grid,
+    .blog-grid,
+    .footer-grid,
+    .dashboard-columns,
+    .profile-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .about-layout,
+    .contact-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .stats-band {
+      grid-template-columns: 1fr;
+    }
+
+    .stats-band > div + div {
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      border-left: 0;
+    }
+
+    .section-heading-row {
+      display: block;
+    }
+
+    .section-heading-row .text-link {
+      margin-top: 1rem;
+    }
+
+    .table-scroll {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+  }
+
   .main-nav {
     display: none;
   }
@@ -3604,4 +3853,111 @@ input[type="file"] { padding: .68rem; cursor: pointer; }
   .doctor-profile-summary img { width: 64px; height: 64px; }
   .doctor-profile-summary .status-badge { grid-column: 1 / -1; justify-self: start; }
   .doctor-metrics { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 991px) {
+  .main-nav,
+  .nav-actions {
+    display: none;
+  }
+
+  .nav {
+    min-height: 76px;
+    gap: 12px;
+    flex-wrap: nowrap;
+  }
+
+  .menu-toggle {
+    display: flex;
+    margin-left: auto;
+  }
+
+  .mobile-menu {
+    display: flex;
+    visibility: hidden;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.25s ease, visibility 0.3s ease;
+  }
+
+  .mobile-menu.is-open {
+    visibility: visible;
+    max-height: 80vh;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .container {
+    width: calc(100% - 32px);
+  }
+
+  .hero {
+    padding: 42px 0 58px;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .hero-content {
+    display: contents;
+  }
+
+  .hero-content .mini-badge { grid-row: 1; }
+  .hero-content h1 {
+    grid-row: 2;
+    max-width: 100%;
+    font-size: clamp(2rem, 9vw, 3rem);
+  }
+  .hero-content .subheading { grid-row: 3; }
+  .hero-visual {
+    grid-row: 4;
+    min-height: min(105vw, 410px);
+    width: 100%;
+  }
+  .hero-content .search-panel {
+    grid-row: 5;
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+  .hero-content .search-panel .field,
+  .hero-content .search-panel input,
+  .hero-content .search-panel .search-btn {
+    width: 100%;
+    min-height: 52px;
+  }
+  .hero-content .search-panel .search-btn {
+    padding: 0.9rem 1rem;
+  }
+  .hero-content .cta-row { grid-row: 6; }
+  .hero-content .stats { grid-row: 7; }
+
+  .specialty-grid,
+  .doctor-grid,
+  .blog-grid,
+  .footer-grid,
+  .dashboard-columns,
+  .profile-grid,
+  .about-layout,
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-band {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-band > div + div {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: 0;
+  }
+
+  .table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+  }
 }
