@@ -29,6 +29,15 @@
       <span>D.I. KHAN'S PREMIER ONLINE HEALTHCARE</span>
     </div>
     <div class="page-shell" id="top">
+      <div class="announcement-bar">
+        <div class="container announcement-inner">
+          <span>Opening Hours: <strong>8:00 AM - 8:00 PM</strong></span>
+          <span>Location: <strong>D.I. Khan</strong></span>
+          <a href="tel:+1234567890">Phone: <strong>+123 456 7890</strong></a>
+          <span class="announcement-socials" aria-label="Social media">f&nbsp;&nbsp;◎&nbsp;&nbsp;x</span>
+          <button type="button" class="announcement-cta" data-scroll-target="doctor-listings">Appointment</button>
+        </div>
+      </div>
       <header class="topbar">
         <div class="container nav">
           <div class="brand brand-logo-container" aria-label="Doctor Q logo and brand name">
@@ -38,22 +47,30 @@
             <path d="M59 59c-7 8-3 18 6 18 8 0 12-7 12-14 0-8-5-13-12-13-6 0-10 4-10 10 0 8 7 14 14 14l8 8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" />
           </svg>
           <div class="brand-text">
-            <span class="brand-name">Doctor Q</span>
-            <small>D.I. KHAN'S PREMIER ONLINE HEALTHCARE</small>
+            <span class="brand-name">HEALTHCARE</span>
+            <small>DOCTOR Q · D.I. KHAN'S PREMIER ONLINE HEALTHCARE</small>
           </div>
           </div>
 
           <nav class="main-nav" aria-label="Main navigation">
-            <a href="#top" data-scroll-target="top">Home</a>
-            <a href="#specialty-section" data-scroll-target="specialty-section">Specialists</a>
-            <a href="#areas-section" data-scroll-target="areas-section">Hospitals</a>
-            <a href="#doctor-listings" data-scroll-target="doctor-listings">Reviews</a>
-            <a href="#emergency-footer" data-scroll-target="emergency-footer">Support</a>
+            <details class="nav-dropdown">
+              <summary>Home <span aria-hidden="true">⌄</span></summary>
+              <div class="nav-dropdown-menu">
+                <a href="#top" data-scroll-target="top">Overview</a>
+                <a href="#about-section" data-scroll-target="about-section">About Doctor Q</a>
+                <a href="#contact-section" data-scroll-target="contact-section">Contact us</a>
+              </div>
+            </details>
+            <a href="#specialty-section" data-scroll-target="specialty-section">Services</a>
+            <a href="#about-section" data-scroll-target="about-section">About</a>
+            <a href="#doctor-listings" data-scroll-target="doctor-listings">Team</a>
+            <a href="#contact-section" data-scroll-target="contact-section">Contact Us</a>
+            <a href="#blog-section" data-scroll-target="blog-section">Blog</a>
           </nav>
 
           <div class="nav-actions">
             <button class="btn btn-ghost sign-in-btn" type="button" data-modal-target="signin-modal">Sign In</button>
-            <button class="btn btn-primary nav-book-btn" type="button" data-scroll-target="doctor-listings">Book Now</button>
+            <button class="btn btn-primary nav-book-btn" type="button" data-scroll-target="doctor-listings">Appointment</button>
           </div>
 
           <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
@@ -64,11 +81,16 @@
         </div>
 
         <div class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation">
-          <a href="#top" data-scroll-target="top">Home</a>
+          <details class="mobile-nav-dropdown">
+            <summary>Home <span aria-hidden="true">⌄</span></summary>
+            <a href="#top" data-scroll-target="top">Overview</a>
+            <a href="#about-section" data-scroll-target="about-section">About Doctor Q</a>
+            <a href="#contact-section" data-scroll-target="contact-section">Contact us</a>
+          </details>
           <a href="#specialty-section" data-scroll-target="specialty-section">Specialists</a>
-          <a href="#areas-section" data-scroll-target="areas-section">Hospitals</a>
-          <a href="#doctor-listings" data-scroll-target="doctor-listings">Reviews</a>
-          <a href="#emergency-footer" data-scroll-target="emergency-footer">Support</a>
+          <a href="#doctor-listings" data-scroll-target="doctor-listings">Our doctors</a>
+          <a href="#blog-section" data-scroll-target="blog-section">Health library</a>
+          <a href="#contact-section" data-scroll-target="contact-section">Contact</a>
         </div>
       </header>
 
@@ -79,13 +101,13 @@
             <div class="hero-content reveal">
               <div class="mini-badge">
                 <span class="pulse-dot"></span>
-                Trusted local healthcare network
+                Our Introduction
               </div>
 
-              <h1>Book Appointments with D.I. Khan's Top Doctors Online</h1>
+              <h1>Book Online For Doctor's Appointment</h1>
               <p class="subheading">
-                Easily find trusted specialists, check clinic timings across D.I. Khan,
-                and book your appointment hassle-free.
+                Connect with trusted doctors, explore specialties, and schedule quality care
+                from the comfort of your home.
               </p>
 
               <form class="search-panel" aria-label="Doctor search filter">
@@ -134,7 +156,7 @@
               </datalist>
 
               <div class="cta-row">
-                <button class="btn btn-primary hero-book-btn" type="button" data-scroll-target="doctor-listings">Book Now</button>
+                <button class="btn btn-primary hero-book-btn" type="button" data-scroll-target="doctor-listings">Get Started</button>
                 <button class="btn btn-secondary scroll-specialists-btn" type="button" data-scroll-target="specialty-section">Explore Specialists</button>
               </div>
 
@@ -153,7 +175,18 @@
                 </div>
               </div>
             </div>
-
+            <div class="hero-visual reveal" aria-label="Doctor Q care team">
+              <div class="hero-visual-glow"></div>
+              <div class="hero-photo">
+                <img src="https://images.unsplash.com/photo-1651008376811-b90baee60c1f?auto=format&fit=crop&w=900&q=85" alt="Doctor speaking with a patient" />
+                <span class="hero-photo-label"><span class="pulse-dot"></span> Caring for D.I. Khan</span>
+              </div>
+              <div class="hero-trust-card">
+                <div class="avatar-stack" aria-hidden="true"><span>AK</span><span>SB</span><span>AI</span><span>+</span></div>
+                <strong>10,000+ patients</strong>
+                <small>feel confident with Doctor Q</small>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -292,20 +325,55 @@
           </div>
         </section>
 
+        <section class="about-section reveal" id="about-section">
+          <div class="container about-layout">
+            <div class="about-visual">
+              <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=85" alt="Healthcare professional reviewing a patient's care plan" />
+              <div class="about-badge"><strong>12+</strong><span>years connecting<br />care locally</span></div>
+            </div>
+            <div class="about-copy">
+              <span class="section-kicker">About Us</span>
+              <h2>We Are The Best To Take Care Of You</h2>
+              <p>We connect families in D.I. Khan with trusted doctors, clear information, and support at every step of their care journey.</p>
+              <div class="about-tabs" role="tablist" aria-label="About Doctor Q">
+                <button type="button" class="about-tab active" role="tab" aria-selected="true" aria-controls="about-panel-care" data-about-tab="care">Our care</button>
+                <button type="button" class="about-tab" role="tab" aria-selected="false" aria-controls="about-panel-mission" data-about-tab="mission">Our mission</button>
+                <button type="button" class="about-tab" role="tab" aria-selected="false" aria-controls="about-panel-values" data-about-tab="values">Our values</button>
+              </div>
+              <div class="about-panels">
+                <div class="about-panel active" id="about-panel-care" role="tabpanel"><strong>Care, on your terms.</strong><p>Compare specialists, see availability, and book online or by phone without the usual waiting.</p></div>
+                <div class="about-panel" id="about-panel-mission" role="tabpanel" hidden><strong>Better access for every family.</strong><p>Our mission is to make reliable healthcare easier to discover across every neighbourhood of D.I. Khan.</p></div>
+                <div class="about-panel" id="about-panel-values" role="tabpanel" hidden><strong>Trust is our standard.</strong><p>Verified providers, transparent fees, and respectful support are at the heart of every Doctor Q experience.</p></div>
+              </div>
+              <button type="button" class="text-link" data-scroll-target="contact-section">Learn more about us <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats-section reveal" aria-label="Doctor Q impact">
+          <div class="container stats-band">
+            <div><strong data-target="1250">0</strong><span>Successful Cases</span></div>
+            <div><strong data-target="50">0</strong><span>Qualified Doctors</span></div>
+            <div><strong data-target="12">0</strong><span>Year Of Experience</span></div>
+            <div><strong data-target="24">0</strong><span>Staff Availability</span></div>
+          </div>
+        </section>
+
         <section class="featured-doctors" id="doctor-listings">
          <div class="container">
            <div class="section-header">
-             <span class="section-kicker">Top Recommendations</span>
-             <h2>Top Rated Specialists in D.I. Khan</h2>
-             <p>Book appointments with experienced healthcare professionals near you.</p>
+             <span class="section-kicker">Doctors Team</span>
+             <h2>We Are Happy To Help You</h2>
+             <p>Find experienced healthcare professionals and book a time that works for you.</p>
            </div>
 
            <div class="doctor-filter" aria-label="Doctor categories">
              <button class="filter-tab active" data-filter="all" type="button">All</button>
-             <button class="filter-tab" data-filter="cardiologists" type="button">Cardiologists</button>
-             <button class="filter-tab" data-filter="pediatricians" type="button">Pediatricians</button>
-             <button class="filter-tab" data-filter="gynecologists" type="button">Gynecologists</button>
-             <button class="filter-tab" data-filter="orthopedics" type="button">Orthopedics</button>
+             <button class="filter-tab" data-filter="surgeon" type="button">Surgeon</button>
+             <button class="filter-tab" data-filter="cardiologists" type="button">Cardiologist</button>
+             <button class="filter-tab" data-filter="dental" type="button">Dental</button>
+             <button class="filter-tab" data-filter="gynecologists" type="button">Gynecologist</button>
+             <button class="filter-tab" data-filter="pediatricians" type="button">Pediatrician</button>
            </div>
 
            <div class="doctor-grid">
@@ -492,6 +560,66 @@
          </div>
         </section>
 
+        <section class="contact-section reveal" id="contact-section">
+         <div class="container contact-layout">
+           <div class="contact-copy">
+             <span class="section-kicker">We’re here to help</span>
+             <h2>Get In Touch</h2>
+             <p>Our local support team can help you find a specialist, understand your options, or get ready for your visit.</p>
+             <div class="contact-details">
+               <a href="tel:+923001234567"><span class="contact-icon">☎</span><span><small>Call or WhatsApp</small><strong>+92 300 1234567</strong></span></a>
+               <a href="mailto:care@doctorq.pk"><span class="contact-icon">✉</span><span><small>Email us</small><strong>care@doctorq.pk</strong></span></a>
+             </div>
+           </div>
+           <div class="contact-card">
+             <form id="contact-form" class="contact-form">
+               <label><span>Name</span><input name="name" type="text" placeholder="Enter your name" required /></label>
+               <label><span>Email</span><input name="email" type="email" placeholder="Enter your email" required /></label>
+               <label><span>Contact No.</span><input name="phone" type="tel" placeholder="Enter your contact number" required /></label>
+               <label><span>How can we help?</span><textarea name="message" rows="4" placeholder="Tell us what you need..." required></textarea></label>
+               <button type="submit" class="btn btn-primary">Send message <span aria-hidden="true">→</span></button>
+             </form>
+           </div>
+           <div class="contact-map" aria-label="Map showing Doctor Q in D.I. Khan">
+             <span class="map-pin">+</span><span class="map-label">Doctor Q<br /><small>D.I. Khan</small></span>
+           </div>
+         </div>
+        </section>
+
+        <section class="blog-section reveal" id="blog-section">
+         <div class="container">
+           <div class="section-heading-row">
+             <div><span class="section-kicker">Latest Update</span><h2>Small steps, better health</h2></div>
+             <a href="#contact-section" data-scroll-target="contact-section" class="text-link">View all articles <span aria-hidden="true">→</span></a>
+           </div>
+           <div class="blog-grid">
+             <article class="blog-card blog-featured"><img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=1000&q=80" alt="Doctor checking a patient's heart" /><div><span>21 April 2021 · Wellness</span><h3>How to prepare for your first specialist appointment</h3><a href="#contact-section" data-scroll-target="contact-section">Read article <span aria-hidden="true">→</span></a></div></article>
+             <article class="blog-card"><img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80" alt="Healthy food on a table" /><div><span>21 April 2021 · Nutrition</span><h3>Everyday habits that support your heart</h3><a href="#contact-section" data-scroll-target="contact-section">Read article <span aria-hidden="true">→</span></a></div></article>
+             <article class="blog-card"><img src="https://images.unsplash.com/photo-1542884748-2b87b36c6b90?auto=format&fit=crop&w=800&q=80" alt="Person enjoying a peaceful walk" /><div><span>21 April 2021 · Mind &amp; body</span><h3>Making space for your mental wellbeing</h3><a href="#contact-section" data-scroll-target="contact-section">Read article <span aria-hidden="true">→</span></a></div></article>
+           </div>
+         </div>
+        </section>
+
+        <section class="testimonials-section reveal" aria-label="Patient testimonials">
+         <div class="container">
+           <div class="section-header"><span class="section-kicker">Client Feedback</span><h2>Care that people remember</h2></div>
+           <div class="testimonial-carousel" id="testimonial-carousel">
+             <button type="button" class="carousel-control carousel-prev" aria-label="Previous testimonial">←</button>
+             <div class="testimonial-viewport">
+               <article class="testimonial-slide active"><div class="quote-mark">“</div><blockquote>Doctor Q made it easy to find a caring pediatrician for my daughter. I booked in minutes and knew exactly where to go.</blockquote><div class="testimonial-person"><span class="testimonial-avatar">SN</span><span><strong>Sana Noor</strong><small>Patient · D.I. Khan</small></span></div></article>
+               <article class="testimonial-slide"><div class="quote-mark">“</div><blockquote>The clear timings and friendly support saved me a long trip. I finally feel confident managing my parents’ appointments.</blockquote><div class="testimonial-person"><span class="testimonial-avatar">HR</span><span><strong>Hassan Raza</strong><small>Patient · D.I. Khan</small></span></div></article>
+               <article class="testimonial-slide"><div class="quote-mark">“</div><blockquote>Our clinic reaches the right patients while we focus on what matters most: thoughtful, personal care.</blockquote><div class="testimonial-person"><span class="testimonial-avatar">AI</span><span><strong>Dr. Ayesha Ismail</strong><small>Doctor · D.I. Khan</small></span></div></article>
+             </div>
+             <button type="button" class="carousel-control carousel-next" aria-label="Next testimonial">→</button>
+           </div>
+           <div class="carousel-dots" role="tablist" aria-label="Choose testimonial">
+             <button type="button" class="active" aria-label="Testimonial 1" data-slide="0"></button>
+             <button type="button" aria-label="Testimonial 2" data-slide="1"></button>
+             <button type="button" aria-label="Testimonial 3" data-slide="2"></button>
+           </div>
+         </div>
+        </section>
+
         <section class="dashboard hidden" id="admin-dashboard" aria-hidden="true">
           <div class="container">
             <div class="dashboard-heading">
@@ -512,22 +640,25 @@
                 <div class="card-heading"><div><span class="section-kicker small">New Provider</span><h3>Add Doctor</h3></div></div>
                 <form id="add-doctor-form" class="dashboard-form">
                   <div class="form-grid">
-                    <label><span>Full Name</span><input name="name" required placeholder="Dr. Ayesha Khan" /></label>
-                    <label><span>Specialty</span><input name="specialty" required placeholder="Cardiology" /></label>
-                    <label><span>Assigned Email</span><input type="email" name="email" placeholder="doctor@example.com" /></label>
-                    <label><span>Assigned Password</span><div class="password-input"><input type="password" name="password" placeholder="Temporary password" /><button type="button" class="password-toggle" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" /><circle cx="12" cy="12" r="2.5" /></svg></button></div></label>
-                    <label><span>Hospital / Area</span><input name="hospital" value="D.I. Khan" /></label>
+                    <label><span>Full Name</span><input name="name" required placeholder="Enter Doctor Name" /></label>
+                    <label><span>Specialty</span><input name="specialty" required list="admin-specialty-options" placeholder="Select or enter specialty" /></label>
+                    <label><span>Assigned Email</span><input type="email" name="email" placeholder="Enter Email Address" /></label>
+                    <label><span>Assigned Password</span><div class="password-input"><input type="password" name="password" placeholder="Enter Password" autocomplete="new-password" /><button type="button" class="password-toggle" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" /><circle cx="12" cy="12" r="2.5" /></svg></button></div></label>
+                    <label><span>Hospital / Area</span><input name="hospital" list="admin-area-options" placeholder="Select or enter hospital / area" value="D.I. Khan" /></label>
                     <label><span>Consultation fee (PKR)</span><input type="number" min="0" name="fee" value="1500" /></label>
                     <label><span>Clinic timings</span><input name="timing" value="09:00 AM - 05:00 PM" /></label>
                     <label><span>Image URL</span><input type="url" name="image" placeholder="https://example.com/doctor.jpg" /></label>
+                    <label><span>Image file</span><input type="file" name="imageFile" accept="image/*" /></label>
                   </div>
                   <button class="btn btn-primary" type="submit">Add Doctor &amp; Generate Credentials</button>
                 </form>
                 <div id="doctor-credentials" class="credentials-box hidden" aria-live="polite"></div>
+                <datalist id="admin-specialty-options"></datalist>
+                <datalist id="admin-area-options"></datalist>
               </article>
               <article class="dashboard-card">
                 <div class="card-heading"><div><span class="section-kicker small">Provider Directory</span><h3>Manage Doctors</h3></div></div>
-                <div class="table-scroll"><table class="data-table" id="doctors-table"><thead><tr><th>Doctor</th><th>Specialty</th><th>Clinic</th><th>Credentials</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5">Loading doctors…</td></tr></tbody></table></div>
+                <div class="table-scroll"><table class="data-table" id="doctors-table"><thead><tr><th>Doctor</th><th>Specialty</th><th>Clinic</th><th>Status</th><th>Credentials</th><th>Actions</th></tr></thead><tbody><tr><td colspan="6">Loading doctors…</td></tr></tbody></table></div>
               </article>
             </div>
             <article class="dashboard-card">
@@ -540,6 +671,19 @@
         <section class="dashboard hidden" id="doctor-dashboard" aria-hidden="true">
           <div class="container">
             <div class="dashboard-heading"><div><span class="section-kicker">Doctor Portal</span><h2 id="doctor-dashboard-title">Doctor Dashboard</h2><p>Review and update your patient appointments.</p></div><button type="button" class="btn btn-secondary dashboard-home-btn">Back to site</button></div>
+            <article class="dashboard-card doctor-profile-card" id="doctor-profile-card">
+              <div class="card-heading"><div><span class="section-kicker small">My profile</span><h3>Practice profile</h3></div><button type="button" class="btn btn-secondary edit-own-profile-btn">Edit profile</button></div>
+              <div class="doctor-profile-summary">
+                <img id="portal-doctor-image" src="" alt="Doctor profile" />
+                <div class="doctor-profile-copy"><h3 id="portal-doctor-name">Doctor</h3><p id="portal-doctor-specialty">General Medicine</p><p id="portal-doctor-timings">Flexible</p></div>
+                <span id="portal-doctor-status" class="status-badge status-confirmed">Active</span>
+              </div>
+              <div class="doctor-metrics">
+                <div><span>Consultation fee</span><strong id="portal-doctor-fee">PKR 0</strong></div>
+                <div><span>Booked patients</span><strong id="portal-booked-patients">0</strong></div>
+                <div><span>Earnings</span><strong id="portal-doctor-earnings">PKR 0</strong></div>
+              </div>
+            </article>
             <article class="dashboard-card"><div class="card-heading"><div><span class="section-kicker small">Schedule</span><h3>My Appointments</h3></div></div><div class="table-scroll"><table class="data-table" id="doctor-appointments-table"><thead><tr><th>Patient</th><th>Date &amp; time</th><th>Contact</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td colspan="5">Loading appointments…</td></tr></tbody></table></div></article>
           </div>
         </section>
@@ -687,6 +831,30 @@
                 <p id="doctor-profile-specialty">Cardiologist</p>
                 <span id="doctor-profile-location">Circular Road Clinic, D.I. Khan</span>
               </div>
+
+              <div class="modal-overlay hidden" id="edit-doctor-modal" aria-hidden="true">
+                <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="edit-doctor-title">
+                  <button type="button" class="close-modal" aria-label="Close doctor editor">×</button>
+                  <div class="modal-header single-header">
+                    <div><span class="section-kicker alt small">Provider profile</span><h3 id="edit-doctor-title">Edit doctor profile</h3></div>
+                  </div>
+                  <form id="edit-doctor-form" class="booking-form">
+                    <input type="hidden" name="doctorId" />
+                    <div class="form-grid">
+                      <label><span>Full Name</span><input name="name" required placeholder="Dr. Ayesha Khan" /></label>
+                      <label><span>Specialty</span><input name="specialty" required list="edit-specialty-options" placeholder="Cardiology" /></label>
+                      <label><span>Hospital / Area</span><input name="hospital" list="edit-area-options" placeholder="D.I. Khan" /></label>
+                      <label><span>Consultation fee (PKR)</span><input type="number" min="0" name="fee" placeholder="1500" /></label>
+                      <label><span>Clinic timings</span><input name="timing" placeholder="09:00 AM - 05:00 PM" /></label>
+                      <label><span>Image URL</span><input type="url" name="image" placeholder="https://example.com/doctor.jpg" /></label>
+                      <label><span>Image file</span><input type="file" name="imageFile" accept="image/*" /></label>
+                    </div>
+                    <datalist id="edit-specialty-options"></datalist>
+                    <datalist id="edit-area-options"></datalist>
+                    <div class="modal-footer"><span class="fee-box">Changes sync across the directory</span><div class="modal-actions"><button type="button" class="btn btn-secondary close-modal-btn">Cancel</button><button type="submit" class="btn btn-primary">Save profile</button></div></div>
+                  </form>
+                </div>
+              </div>
             </div>
             <div class="profile-body">
               <div class="profile-grid">
@@ -829,7 +997,7 @@
                 </div>
 
                 <div class="footer-column">
-                  <h3>Top Local Areas</h3>
+                  <h3>Office Address</h3>
                   <ul>
                     <li><button type="button" class="footer-area-link" data-area="Circular Road">Circular Road</button></li>
                     <li><button type="button" class="footer-area-link" data-area="Thall Road">Thall Road</button></li>
@@ -839,7 +1007,7 @@
                 </div>
 
                 <div class="footer-column">
-                  <h3>Quick Links</h3>
+                  <h3>Talk To Expert</h3>
                   <ul>
                     <li><button type="button" class="footer-link" data-scroll-target="top">Home</button></li>
                     <li><button type="button" class="footer-link" data-scroll-target="specialty-section">Specialties</button></li>
@@ -850,17 +1018,17 @@
                 </div>
 
                 <div class="footer-column">
-                  <h3>Contact Us</h3>
+                  <h3>Email Us</h3>
                   <ul>
-                    <li>WhatsApp: +92 300 1234567</li>
-                    <li>Email: care@doctorq.pk</li>
-                    <li>Office: D.I. Khan, Khyber Pakhtunkhwa</li>
+                    <li>care@doctorq.pk</li>
+                    <li>support@doctorq.pk</li>
+                    <li>Open daily, 8:00 AM - 8:00 PM</li>
                   </ul>
                 </div>
               </div>
 
               <div class="copyright-bar">
-                © 2026 Doctor Q. All Rights Reserved. Built for D.I. Khan.
+                Copyright © 2026 HealthCare All Right Reserved.
               </div>
             </footer>
           </div>

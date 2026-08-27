@@ -7,14 +7,27 @@ const state = {
   specialtiesExpanded: false,
   areasExpanded: false,
   doctors: [],
+  adminDoctors: [],
   loadingDoctors: false,
   activeAuthRole: 'Patient',
   authMode: 'signin',
   currentUser: null,
   appointments: [],
+  editingDoctorId: null,
 };
 
-const homepageSections = ['.hero', '.areas-section', '.specialties', '.featured-doctors', '.emergency-footer'];
+const homepageSections = [
+  '.hero',
+  '.areas-section',
+  '.specialties',
+  '.about-section',
+  '.stats-section',
+  '.featured-doctors',
+  '.contact-section',
+  '.blog-section',
+  '.testimonials-section',
+  '.emergency-footer',
+];
 const dashboardIds = ['admin-dashboard', 'doctor-dashboard', 'patient-dashboard'];
 const ADMIN_EMAIL = 'muhammadsadaf010@gmail.com';
 const ADMIN_PASSWORD = 'Sadaf@9099';
@@ -48,14 +61,22 @@ const updateAuthenticatedNavigation = (user = null) => {
   }
 
   mainNav.innerHTML = `
-    <a href="#top" data-scroll-target="top">Home</a>
-    <a href="#specialty-section" data-scroll-target="specialty-section">Specialists</a>
-    <a href="#areas-section" data-scroll-target="areas-section">Hospitals</a>
-    <a href="#doctor-listings" data-scroll-target="doctor-listings">Reviews</a>
-    <a href="#emergency-footer" data-scroll-target="emergency-footer">Support</a>
+    <details class="nav-dropdown">
+      <summary>Home <span aria-hidden="true">⌄</span></summary>
+      <div class="nav-dropdown-menu">
+        <a href="#top" data-scroll-target="top">Overview</a>
+        <a href="#about-section" data-scroll-target="about-section">About Doctor Q</a>
+        <a href="#contact-section" data-scroll-target="contact-section">Contact us</a>
+      </div>
+    </details>
+    <a href="#specialty-section" data-scroll-target="specialty-section">Services</a>
+    <a href="#about-section" data-scroll-target="about-section">About</a>
+    <a href="#doctor-listings" data-scroll-target="doctor-listings">Team</a>
+    <a href="#contact-section" data-scroll-target="contact-section">Contact Us</a>
+    <a href="#blog-section" data-scroll-target="blog-section">Blog</a>
   `;
-  navActions.innerHTML = '<button class="btn btn-ghost sign-in-btn" type="button" data-modal-target="signin-modal">Sign In</button><button class="btn btn-primary nav-book-btn" type="button" data-scroll-target="doctor-listings">Book Now</button>';
-  if (mobileMenu) mobileMenu.innerHTML = '<a href="#top" data-scroll-target="top">Home</a><a href="#specialty-section" data-scroll-target="specialty-section">Specialists</a><a href="#areas-section" data-scroll-target="areas-section">Hospitals</a><a href="#doctor-listings" data-scroll-target="doctor-listings">Reviews</a><a href="#emergency-footer" data-scroll-target="emergency-footer">Support</a>';
+  navActions.innerHTML = '<button class="btn btn-ghost sign-in-btn" type="button" data-modal-target="signin-modal">Sign In</button><button class="btn btn-primary nav-book-btn" type="button" data-scroll-target="doctor-listings">Appointment</button>';
+  if (mobileMenu) mobileMenu.innerHTML = '<details class="mobile-nav-dropdown"><summary>Home <span aria-hidden="true">⌄</span></summary><a href="#top" data-scroll-target="top">Overview</a><a href="#about-section" data-scroll-target="about-section">About Doctor Q</a><a href="#contact-section" data-scroll-target="contact-section">Contact Us</a></details><a href="#specialty-section" data-scroll-target="specialty-section">Services</a><a href="#about-section" data-scroll-target="about-section">About</a><a href="#doctor-listings" data-scroll-target="doctor-listings">Team</a><a href="#blog-section" data-scroll-target="blog-section">Blog</a><a href="#contact-section" data-scroll-target="contact-section">Contact Us</a>';
   setupNavigation();
 };
 
@@ -103,6 +124,69 @@ const setupAreasToggle = () => {
     areaGrid?.classList.toggle('areas-expanded', state.areasExpanded);
     viewAllButton.textContent = state.areasExpanded ? 'Show Fewer Areas' : 'View All Areas';
   });
+};
+
+const setupAboutTabs = () => {
+  const tabs = document.querySelectorAll('[data-about-tab]');
+  const panels = document.querySelectorAll('.about-panel');
+  if (!tabs.length || !panels.length) return;
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const selected = tab.dataset.aboutTab;
+      tabs.forEach((item) => {
+        const active = item === tab;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-selected', String(active));
+      });
+      panels.forEach((panel) => {
+        const active = panel.id === `about-panel-${selected}`;
+        panel.classList.toggle('active', active);
+        panel.hidden = !active;
+      });
+    });
+  });
+};
+
+const setupContactForm = () => {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const button = form.querySelector('button[type="submit"]');
+    if (button) {
+      button.disabled = true;
+      button.textContent = 'Message sent ✓';
+    }
+    showToast('Thanks for reaching out. Our team will be in touch soon.');
+    window.setTimeout(() => {
+      form.reset();
+      if (button) {
+        button.disabled = false;
+        button.innerHTML = 'Send message <span aria-hidden="true">→</span>';
+      }
+    }, 1800);
+  });
+};
+
+const setupTestimonials = () => {
+  const carousel = document.getElementById('testimonial-carousel');
+  if (!carousel) return;
+  const slides = Array.from(carousel.querySelectorAll('.testimonial-slide'));
+  const dots = Array.from(document.querySelectorAll('.carousel-dots [data-slide]'));
+  if (!slides.length) return;
+  let current = 0;
+
+  const showSlide = (index) => {
+    current = (index + slides.length) % slides.length;
+    slides.forEach((slide, slideIndex) => slide.classList.toggle('active', slideIndex === current));
+    dots.forEach((dot, dotIndex) => dot.classList.toggle('active', dotIndex === current));
+  };
+
+  carousel.querySelector('.carousel-prev')?.addEventListener('click', () => showSlide(current - 1));
+  carousel.querySelector('.carousel-next')?.addEventListener('click', () => showSlide(current + 1));
+  dots.forEach((dot) => dot.addEventListener('click', () => showSlide(Number(dot.dataset.slide))));
+  window.setInterval(() => showSlide(current + 1), 7000);
 };
 
 const setupPasswordToggles = () => {
@@ -482,6 +566,7 @@ const normalizeDoctorPayload = (doctor = {}) => {
       doctor.reviews ||
       doctor.review ||
       'Highly rated for clear communication, thoughtful care, and healthy treatment outcomes.',
+    active: doctor.active !== false,
   };
 };
 
@@ -493,6 +578,50 @@ const extractDoctorList = (payload) => {
   if (Array.isArray(payload.items)) return payload.items.map(normalizeDoctorPayload);
   return [];
 };
+
+const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+}[character]));
+
+const updateDoctorDatalists = () => {
+  const specialties = [...new Set([
+    ...specialtyCatalog.map((item) => item.name),
+    ...state.doctors.map((doctor) => doctor.specialty),
+    ...state.adminDoctors.map((doctor) => doctor.specialty),
+  ].filter(Boolean))];
+  const areas = [...new Set([
+    ...Array.from(document.querySelectorAll('#area-options option')).map((option) => option.value),
+    ...state.doctors.map((doctor) => doctor.area),
+    ...state.adminDoctors.map((doctor) => doctor.area || doctor.clinic),
+  ].filter(Boolean))];
+  ['specialty-options', 'admin-specialty-options', 'edit-specialty-options'].forEach((id) => {
+    const list = document.getElementById(id);
+    if (list) list.innerHTML = specialties.map((value) => `<option value="${escapeHtml(value)}"></option>`).join('');
+  });
+  ['area-options', 'admin-area-options', 'edit-area-options'].forEach((id) => {
+    const list = document.getElementById(id);
+    if (list) list.innerHTML = areas.map((value) => `<option value="${escapeHtml(value)}"></option>`).join('');
+  });
+};
+
+const readImageFile = (file) => new Promise((resolve, reject) => {
+  if (!file || !file.size) {
+    resolve('');
+    return;
+  }
+  if (!file.type.startsWith('image/')) {
+    reject(new Error('Please select a valid image file.'));
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => resolve(String(reader.result || ''));
+  reader.onerror = () => reject(new Error('Unable to read the selected image.'));
+  reader.readAsDataURL(file);
+});
 
 const setDoctorLoadingState = (isLoading) => {
   state.loadingDoctors = isLoading;
@@ -528,7 +657,8 @@ const renderDoctorCards = (doctorList = state.doctors) => {
     return;
   }
 
-  if (!doctorList.length) {
+  const visibleDoctors = doctorList.filter((doctor) => doctor.active !== false);
+  if (!visibleDoctors.length) {
     doctorGrid.innerHTML = `
       <div class="doctor-state-message">
         <p>No doctors match the current search.</p>
@@ -538,34 +668,34 @@ const renderDoctorCards = (doctorList = state.doctors) => {
     return;
   }
 
-  doctorGrid.innerHTML = doctorList
+  doctorGrid.innerHTML = visibleDoctors
     .map(
       (doctor) => `
-        <article class="doctor-card reveal" data-category="${doctor.category}" data-doctor-name="${doctor.name}" data-specialty="${doctor.specialty}" data-clinic="${doctor.clinic}" data-area="${doctor.area}" data-fee="${doctor.fee}" data-image="${doctor.image}">
+        <article class="doctor-card reveal" data-doctor-id="${escapeHtml(doctor.id)}" data-category="${escapeHtml(doctor.category)}" data-doctor-name="${escapeHtml(doctor.name)}" data-specialty="${escapeHtml(doctor.specialty)}" data-clinic="${escapeHtml(doctor.clinic)}" data-area="${escapeHtml(doctor.area)}" data-fee="${escapeHtml(doctor.fee)}" data-image="${escapeHtml(doctor.image)}">
           <div class="doctor-image-wrap">
-            <img src="${doctor.image}" alt="${doctor.name}" />
+            <img src="${escapeHtml(doctor.image)}" alt="${escapeHtml(doctor.name)}" />
             <span class="availability-badge">Available Today</span>
           </div>
           <div class="doctor-body">
             <div class="doctor-mainline">
               <div>
-                <h3>${doctor.name}</h3>
-                <p>${doctor.qualification}</p>
+                <h3>${escapeHtml(doctor.name)}</h3>
+                <p>${escapeHtml(doctor.qualification)}</p>
               </div>
               <span class="rating">${Number(doctor.rating).toFixed(1)} ★</span>
             </div>
-            <p class="specialty">${doctor.specialty}</p>
+            <p class="specialty">${escapeHtml(doctor.specialty)}</p>
             <div class="meta-row">
-              <span>📍 ${doctor.clinic}</span>
+              <span>📍 ${escapeHtml(doctor.clinic)}</span>
             </div>
             <div class="meta-row">
-              <span>🕒 ${doctor.timings}</span>
+              <span>🕒 ${escapeHtml(doctor.timings)}</span>
             </div>
             <div class="card-footer">
               <strong>PKR ${Number(doctor.fee).toLocaleString()}</strong>
               <div class="cta-actions">
-                <button type="button" class="btn btn-primary small-btn book-btn" data-doctor-name="${doctor.name}">Book Appointment</button>
-                <button type="button" class="view-profile-btn" data-doctor-name="${doctor.name}">View Profile</button>
+                <button type="button" class="btn btn-primary small-btn book-btn" data-doctor-id="${escapeHtml(doctor.id)}">Book Appointment</button>
+                <button type="button" class="view-profile-btn" data-doctor-id="${escapeHtml(doctor.id)}">View Profile</button>
               </div>
             </div>
           </div>
@@ -683,9 +813,10 @@ const fetchDoctors = async (params = {}) => {
 
   const payload = await response.json().catch(() => ({}));
   const doctors = extractDoctorList(payload);
-  state.doctors = doctors;
+  state.doctors = doctors.filter((doctor) => doctor.active !== false);
+  updateDoctorDatalists();
 
-  if (!doctors.length) {
+  if (!state.doctors.length) {
     showToast('No doctors found for the selected filters.', 'error');
   }
 
@@ -719,7 +850,8 @@ const searchDoctors = async (specialtyValue = '', areaValue = '') => {
 
     const payload = await response.json().catch(() => ({}));
     const doctors = extractDoctorList(payload);
-    state.doctors = doctors;
+    state.doctors = doctors.filter((doctor) => doctor.active !== false);
+    updateDoctorDatalists();
     applyDoctorFilters();
     if (!doctors.length) {
       showToast('No doctors match this search.', 'error');
@@ -743,7 +875,7 @@ const setStored = (key, value) => localStorage.setItem(key, JSON.stringify(value
 const apiRequest = async (path, options = {}) => {
   const headers = { Accept: 'application/json', ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...(options.headers || {}) };
   const token = localStorage.getItem('doctorQToken');
-  if (token && token !== 'true') headers.Authorization = `Bearer ${token}`;
+  if (token && token !== 'true') headers.Authorization = 'Bearer ' + token;
   const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(payload.message || 'Request failed.');
@@ -776,14 +908,15 @@ const loadAppointments = async (query = '') => {
 const renderAdminDoctors = () => {
   const body = document.querySelector('#doctors-table tbody');
   if (!body) return;
-  const doctors = state.doctors.length ? state.doctors : getStored('doctorQDoctors', []);
+  const doctors = state.adminDoctors.length ? state.adminDoctors : getStored('doctorQDoctors', []);
   body.innerHTML = doctors.length ? doctors.map((doctor) => `
-    <tr data-doctor-id="${doctor.id}">
-      <td><strong>${doctor.name}</strong><small>${doctor.email || '—'}</small></td>
-      <td>${doctor.specialty}</td><td>${doctor.clinic || doctor.hospital || 'D.I. Khan'}</td>
-      <td>${doctor.email ? `<button class="table-link copy-credential" type="button" data-copy="${doctor.email}">Copy email</button>` : 'Generated on add'}</td>
-      <td class="table-actions"><button type="button" class="table-link edit-doctor" data-id="${doctor.id}">Edit</button><button type="button" class="table-link danger delete-doctor" data-id="${doctor.id}">Delete</button></td>
-    </tr>`).join('') : '<tr><td colspan="5">No doctors found.</td></tr>';
+    <tr data-doctor-id="${escapeHtml(doctor.id)}">
+      <td><strong>${escapeHtml(doctor.name)}</strong><small>${escapeHtml(doctor.email || '—')}</small></td>
+      <td>${escapeHtml(doctor.specialty)}</td><td>${escapeHtml(doctor.clinic || doctor.hospital || 'D.I. Khan')}</td>
+      <td>${statusBadge(doctor.active === false ? 'Inactive' : 'Active')}</td>
+      <td>${doctor.email ? `<button class="table-link copy-credential" type="button" data-copy="${escapeHtml(doctor.email)}">Copy email</button>` : 'Generated on add'}</td>
+      <td class="table-actions"><button type="button" class="table-link edit-doctor" data-id="${escapeHtml(doctor.id)}">Edit</button><button type="button" class="table-link toggle-doctor" data-id="${escapeHtml(doctor.id)}">${doctor.active === false ? 'Activate' : 'Deactivate'}</button><button type="button" class="table-link danger delete-doctor" data-id="${escapeHtml(doctor.id)}">Delete</button></td>
+    </tr>`).join('') : '<tr><td colspan="6">No doctors found.</td></tr>';
 };
 
 const renderAppointmentsTable = (selector, appointments, role) => {
@@ -810,19 +943,23 @@ const renderAppointmentsTable = (selector, appointments, role) => {
 
 const loadAdminDashboard = async () => {
   try {
-    const payload = await apiRequest('/doctors');
-    state.doctors = extractDoctorList(payload);
-    setStored('doctorQDoctors', state.doctors);
+    const payload = await apiRequest('/doctors?includeInactive=true');
+    state.adminDoctors = extractDoctorList(payload);
+    state.doctors = state.adminDoctors.filter((doctor) => doctor.active !== false);
+    setStored('doctorQDoctors', state.adminDoctors);
   } catch (error) {
-    state.doctors = getStored('doctorQDoctors', state.doctors);
+    state.adminDoctors = getStored('doctorQDoctors', state.adminDoctors);
+    state.doctors = state.adminDoctors.filter((doctor) => doctor.active !== false);
   }
+  updateDoctorDatalists();
+  applyDoctorFilters();
   renderAdminDoctors();
   const appointments = await loadAppointments();
   renderAppointmentsTable('#admin-appointments-table', appointments, 'admin');
   const count = document.getElementById('admin-doctor-count');
   const patients = document.getElementById('admin-patient-count');
   const pending = document.getElementById('admin-pending-count');
-  if (count) count.textContent = state.doctors.length;
+  if (count) count.textContent = state.adminDoctors.length;
   if (patients) patients.textContent = getStored('doctorQUsers', []).filter((user) => user.role === 'Patient').length;
   if (pending) pending.textContent = appointments.filter((item) => String(item.status).toLowerCase() === 'pending').length;
   try {
@@ -838,7 +975,9 @@ const loadDoctorDashboard = async () => {
   const title = document.getElementById('doctor-dashboard-title');
   if (title) title.textContent = `${user.name || 'Doctor'}'s Dashboard`;
   const appointments = await loadAppointments(`?doctorId=${encodeURIComponent(user.doctorId || user.id || '')}`);
-  renderAppointmentsTable('#doctor-appointments-table', appointments.filter((item) => !item.id?.toString().startsWith('local-') || String(item.doctorId) === String(user.doctorId || user.id)), 'doctor');
+  const doctorAppointments = appointments.filter((item) => !item.id?.toString().startsWith('local-') || String(item.doctorId) === String(user.doctorId || user.id));
+  renderAppointmentsTable('#doctor-appointments-table', doctorAppointments, 'doctor');
+  renderDoctorPortal(findDoctorForUser(), doctorAppointments);
 };
 
 const loadPatientDashboard = async () => {
@@ -847,6 +986,95 @@ const loadPatientDashboard = async () => {
   if (title) title.textContent = `${user.name || 'Patient'}'s Dashboard`;
   const appointments = await loadAppointments(`?patientEmail=${encodeURIComponent(user.email || '')}`);
   renderAppointmentsTable('#patient-appointments-table', appointments.filter((item) => String(item.patientEmail || '').toLowerCase() === String(user.email || '').toLowerCase() || String(item.patientId) === String(user.id)), 'patient');
+};
+
+const findDoctorForUser = () => {
+  const user = state.currentUser || {};
+  return [...state.adminDoctors, ...state.doctors].find((doctor) =>
+    String(doctor.id) === String(user.doctorId) ||
+    String(doctor.userId) === String(user.id) ||
+    (doctor.email && user.email && doctor.email.toLowerCase() === user.email.toLowerCase())
+  ) || null;
+};
+
+const renderDoctorPortal = (doctor, appointments = []) => {
+  if (!doctor) return;
+  const setText = (id, value) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+  };
+  const image = document.getElementById('portal-doctor-image');
+  if (image) {
+    image.src = doctor.image;
+    image.alt = doctor.name;
+  }
+  setText('portal-doctor-name', doctor.name);
+  setText('portal-doctor-specialty', doctor.specialty);
+  setText('portal-doctor-timings', doctor.timings);
+  setText('portal-doctor-fee', `PKR ${Number(doctor.fee).toLocaleString()}`);
+  setText('portal-booked-patients', appointments.length);
+  const earnings = appointments
+    .filter((appointment) => !['Cancelled', 'Rejected'].includes(appointment.status))
+    .reduce((sum) => sum + Number(doctor.fee || 0), 0);
+  setText('portal-doctor-earnings', `PKR ${earnings.toLocaleString()}`);
+  const status = document.getElementById('portal-doctor-status');
+  if (status) {
+    status.textContent = doctor.active === false ? 'Inactive' : 'Active';
+    status.className = `status-badge ${doctor.active === false ? 'status-cancelled' : 'status-confirmed'}`;
+  }
+};
+
+const openDoctorEditor = (doctor) => {
+  const form = document.getElementById('edit-doctor-form');
+  if (!form || !doctor) return;
+  state.editingDoctorId = String(doctor.id);
+  ['doctorId', 'name', 'specialty', 'hospital', 'fee', 'timing', 'image'].forEach((name) => {
+    const input = form.elements[name];
+    if (input) input.value = name === 'doctorId' ? doctor.id : name === 'timing' ? doctor.timings : name === 'hospital' ? doctor.clinic : (doctor[name] ?? '');
+  });
+  const fileInput = form.elements.imageFile;
+  if (fileInput) fileInput.value = '';
+  const title = document.getElementById('edit-doctor-title');
+  if (title) title.textContent = `Edit ${doctor.name}`;
+  openModalById('edit-doctor-modal');
+};
+
+const setupDoctorEditor = () => {
+  const form = document.getElementById('edit-doctor-form');
+  if (!form) return;
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const doctor = state.adminDoctors.find((item) => String(item.id) === String(state.editingDoctorId)) ||
+      state.doctors.find((item) => String(item.id) === String(state.editingDoctorId));
+    if (!doctor) return;
+    const formData = new FormData(form);
+    const imageFile = await readImageFile(formData.get('imageFile')).catch((error) => {
+      showToast(error.message, 'error');
+      return '';
+    });
+    if (formData.get('imageFile')?.size && !imageFile) return;
+    const changes = {
+      name: String(formData.get('name') || '').trim(),
+      specialty: String(formData.get('specialty') || '').trim(),
+      hospital: String(formData.get('hospital') || '').trim(),
+      fee: Number(formData.get('fee') || 0),
+      timing: String(formData.get('timing') || '').trim(),
+      image: imageFile || String(formData.get('image') || '').trim() || doctor.image,
+    };
+    try { await apiRequest(`/doctors/${doctor.id}`, { method: 'PUT', body: JSON.stringify(changes) }); } catch (error) {}
+    Object.assign(doctor, changes, { clinic: changes.hospital, area: changes.hospital, timings: changes.timing });
+    const adminDoctor = state.adminDoctors.find((item) => String(item.id) === String(doctor.id));
+    if (adminDoctor && adminDoctor !== doctor) Object.assign(adminDoctor, doctor);
+    if (!adminDoctor) state.adminDoctors = [...state.adminDoctors, doctor];
+    state.doctors = state.adminDoctors.filter((item) => item.active !== false);
+    setStored('doctorQDoctors', state.adminDoctors);
+    updateDoctorDatalists();
+    renderAdminDoctors();
+    applyDoctorFilters();
+    closeModalById('edit-doctor-modal');
+    showToast('Doctor profile updated.');
+    if (state.currentUser?.role === 'Doctor') renderDoctorPortal(doctor, state.appointments);
+  });
 };
 
 const updateAppointmentStatus = async (id, status) => {
@@ -864,6 +1092,10 @@ const updateAppointmentStatus = async (id, status) => {
 
 const setupDashboardActions = () => {
   document.querySelectorAll('.dashboard-home-btn').forEach((button) => button.addEventListener('click', signOut));
+  document.querySelector('.edit-own-profile-btn')?.addEventListener('click', () => {
+    const doctor = findDoctorForUser();
+    if (doctor) openDoctorEditor(doctor);
+  });
   document.querySelectorAll('.patient-book-btn').forEach((button) => button.addEventListener('click', () => {
     homepageSections.forEach((selector) => document.querySelector(selector)?.classList.remove('hidden'));
     dashboardIds.forEach((id) => document.getElementById(id)?.classList.add('hidden'));
@@ -875,6 +1107,7 @@ const setupDashboardActions = () => {
   document.addEventListener('click', async (event) => {
     const deleteButton = event.target.closest('.delete-doctor');
     const editButton = event.target.closest('.edit-doctor');
+    const toggleButton = event.target.closest('.toggle-doctor');
     const cancelButton = event.target.closest('.cancel-appointment');
     const copyButton = event.target.closest('.copy-credential');
     if (copyButton) {
@@ -883,17 +1116,31 @@ const setupDashboardActions = () => {
     }
     if (deleteButton && window.confirm('Delete this doctor and their account?')) {
       try { await apiRequest(`/doctors/${deleteButton.dataset.id}`, { method: 'DELETE' }); } catch (error) {}
-      const doctors = getStored('doctorQDoctors', []).filter((doctor) => String(doctor.id) !== String(deleteButton.dataset.id));
-      setStored('doctorQDoctors', doctors); state.doctors = doctors; renderAdminDoctors(); showToast('Doctor deleted.');
+      const doctors = state.adminDoctors.filter((doctor) => String(doctor.id) !== String(deleteButton.dataset.id));
+      state.adminDoctors = doctors;
+      state.doctors = doctors.filter((doctor) => doctor.active !== false);
+      setStored('doctorQDoctors', doctors);
+      updateDoctorDatalists();
+      renderAdminDoctors();
+      applyDoctorFilters();
+      showToast('Doctor deleted.');
+    }
+    if (toggleButton) {
+      const doctor = state.adminDoctors.find((item) => String(item.id) === String(toggleButton.dataset.id));
+      if (!doctor) return;
+      const active = doctor.active === false;
+      try { await apiRequest(`/doctors/${toggleButton.dataset.id}`, { method: 'PUT', body: JSON.stringify({ active }) }); } catch (error) {}
+      doctor.active = active;
+      state.doctors = state.adminDoctors.filter((item) => item.active !== false);
+      setStored('doctorQDoctors', state.adminDoctors);
+      renderAdminDoctors();
+      applyDoctorFilters();
+      showToast(`${doctor.name} is now ${active ? 'active' : 'inactive'}.`);
     }
     if (editButton) {
-      const doctor = state.doctors.find((item) => String(item.id) === String(editButton.dataset.id));
+      const doctor = state.adminDoctors.find((item) => String(item.id) === String(editButton.dataset.id));
       if (!doctor) return;
-      const name = window.prompt('Doctor name', doctor.name);
-      const specialty = name && window.prompt('Specialty', doctor.specialty);
-      if (!name || !specialty) return;
-      try { await apiRequest(`/doctors/${editButton.dataset.id}`, { method: 'PUT', body: JSON.stringify({ name, specialty }) }); } catch (error) {}
-      Object.assign(doctor, { name, specialty }); setStored('doctorQDoctors', state.doctors); renderAdminDoctors(); showToast('Doctor updated.');
+      openDoctorEditor(doctor);
     }
     if (cancelButton) updateAppointmentStatus(cancelButton.dataset.id, 'Cancelled');
   });
@@ -904,7 +1151,15 @@ const setupAdminForm = () => {
   if (!form) return;
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const data = Object.fromEntries(new FormData(form).entries());
+    const formData = new FormData(form);
+    const imageFile = await readImageFile(formData.get('imageFile')).catch((error) => {
+      showToast(error.message, 'error');
+      return '';
+    });
+    if (formData.get('imageFile')?.size && !imageFile) return;
+    const data = Object.fromEntries(formData.entries());
+    delete data.imageFile;
+    if (imageFile) data.image = imageFile;
     const button = form.querySelector('button[type="submit"]');
     button.disabled = true;
     try {
@@ -922,14 +1177,17 @@ const setupAdminForm = () => {
         users.push(user); setStored('doctorQUsers', users);
         doctor = normalizeDoctorPayload({ ...data, id });
       }
-      const doctors = getStored('doctorQDoctors', []);
+      const doctors = getStored('doctorQDoctors', state.adminDoctors);
       doctors.unshift(doctor); setStored('doctorQDoctors', doctors);
-      state.doctors = [doctor, ...state.doctors.filter((item) => String(item.id) !== String(doctor.id))];
+      state.adminDoctors = [doctor, ...state.adminDoctors.filter((item) => String(item.id) !== String(doctor.id))];
+      state.doctors = state.adminDoctors.filter((item) => item.active !== false);
+      updateDoctorDatalists();
+      applyDoctorFilters();
       renderAdminDoctors();
       const credentialsBox = document.getElementById('doctor-credentials');
       if (credentialsBox) {
         credentialsBox.classList.remove('hidden');
-        credentialsBox.innerHTML = `<strong>Doctor account created</strong><span>Email: <b>${credentials?.email || doctor.email}</b></span><span>Temporary password: <b>${credentials?.password || 'Set by doctor'}</b></span><small>Share these credentials securely with the doctor.</small>`;
+        credentialsBox.innerHTML = `<strong>Doctor account created</strong><span>Email: <b>${escapeHtml(credentials?.email || doctor.email)}</b></span><span>Temporary password: <b>${escapeHtml(credentials?.password || 'Set by doctor')}</b></span><small>Share these credentials securely with the doctor.</small>`;
       }
       form.reset();
       showToast('Doctor added and credentials generated.');
@@ -970,16 +1228,16 @@ const setupBookButtons = () => {
   doctorGrid.addEventListener('click', (event) => {
     const bookButton = event.target.closest('.book-btn');
     if (bookButton) {
-      const doctorName = bookButton.dataset.doctorName;
-      setBookingModalDoctor(doctorName);
+      const doctorRef = bookButton.dataset.doctorId || bookButton.dataset.doctorName;
+      setBookingModalDoctor(doctorRef);
       openModalById('booking-modal');
       return;
     }
 
     const profileButton = event.target.closest('.view-profile-btn');
     if (profileButton) {
-      const doctorName = profileButton.dataset.doctorName;
-      openDoctorProfile(doctorName);
+      const doctorRef = profileButton.dataset.doctorId || profileButton.dataset.doctorName;
+      openDoctorProfile(doctorRef);
     }
   });
 
@@ -1012,6 +1270,7 @@ const setupFilters = () => {
           form?.requestSubmit();
         }
       });
+      input.addEventListener('input', applyDoctorFilters);
     }
   });
 };
@@ -1234,8 +1493,8 @@ const setupMobileMenu = () => {
     setMenuState(!state.menuOpen);
   });
 
-  mobileMenu.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => setMenuState(false));
+  mobileMenu.addEventListener('click', (event) => {
+    if (event.target.closest('a')) setMenuState(false);
   });
 
   document.addEventListener('click', (event) => {
@@ -1312,6 +1571,15 @@ const setupSpecialtyModal = () => {
 };
 
 const init = async () => {
+  const staticDoctors = Array.from(document.querySelectorAll('.doctor-card')).map((card) => normalizeDoctorPayload({
+    id: card.dataset.doctorName,
+    name: card.dataset.doctorName,
+    specialty: card.dataset.specialty,
+    hospital: card.dataset.clinic,
+    area: card.dataset.area,
+    fee: card.dataset.fee,
+    image: card.dataset.image,
+  }));
   setupMobileSplash();
   renderSpecialties();
   setupNavigation();
@@ -1323,11 +1591,16 @@ const init = async () => {
   setupFooterActions();
   setupAreaCards();
   setupAreasToggle();
+  setupAboutTabs();
+  setupContactForm();
+  setupTestimonials();
   setupPasswordToggles();
   setupSpecialtyModal();
   setupDashboardActions();
   setupAdminForm();
+  setupDoctorEditor();
   updateAuthFormMode();
+  updateDoctorDatalists();
   setFilterSelection('all');
 
   const savedUser = getStored('doctorQUser', null);
@@ -1345,15 +1618,9 @@ const init = async () => {
     showToast(error.message || 'Unable to load doctors right now.', 'error');
     setDoctorLoadingState(false);
     const localDoctors = getStored('doctorQDoctors', []);
-    state.doctors = localDoctors.length ? localDoctors : Array.from(document.querySelectorAll('.doctor-card')).map((card) => normalizeDoctorPayload({
-      id: card.dataset.doctorName,
-      name: card.dataset.doctorName,
-      specialty: card.dataset.specialty,
-      hospital: card.dataset.clinic,
-      area: card.dataset.area,
-      fee: card.dataset.fee,
-      image: card.dataset.image,
-    }));
+    state.doctors = localDoctors.length ? localDoctors : staticDoctors;
+    state.adminDoctors = state.doctors;
+    updateDoctorDatalists();
     renderDoctorCards(state.doctors);
   }
 };

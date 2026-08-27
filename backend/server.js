@@ -16,7 +16,7 @@ const SUPER_ADMIN_EMAIL = 'muhammadsadaf010@gmail.com';
 const SUPER_ADMIN_PASSWORD = 'Sadaf@9099';
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 const userSchema = new mongoose.Schema(
@@ -42,6 +42,7 @@ const doctorSchema = new mongoose.Schema(
     fee: { type: Number, default: 1500 },
     timing: { type: String, default: '09:00 AM - 05:00 PM' },
     image: { type: String, default: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=700&q=80' },
+    active: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
@@ -211,6 +212,7 @@ app.post('/api/auth/login', async (req, res) => {
 app.get('/api/doctors', async (req, res) => {
   try {
     const filter = {};
+    if (String(req.query.includeInactive).toLowerCase() !== 'true') filter.active = { $ne: false };
     if (req.query.specialty) filter.specialty = { $regex: String(req.query.specialty), $options: 'i' };
     if (req.query.area) filter.$or = [
       { hospital: { $regex: String(req.query.area), $options: 'i' } },
@@ -226,7 +228,7 @@ app.get('/api/doctors', async (req, res) => {
 
 app.get('/api/doctors/search', async (req, res) => {
   try {
-    const terms = [];
+    const terms = [{ active: { $ne: false } }];
     if (req.query.specialty) terms.push({ specialty: { $regex: String(req.query.specialty), $options: 'i' } });
     if (req.query.area) terms.push({ hospital: { $regex: String(req.query.area), $options: 'i' } });
     const doctors = await Doctor.find(terms.length ? { $and: terms } : {}).sort({ createdAt: -1 });
@@ -238,7 +240,7 @@ app.get('/api/doctors/search', async (req, res) => {
 
 app.post('/api/doctors', async (req, res) => {
   try {
-    const { name, specialty, qualification, hospital, fee, timing, timings, image, email, password, phone } = req.body;
+    const { name, specialty, qualification, hospital, fee, timing, timings, image, email, password, phone, active } = req.body;
 
     if (!name || !specialty) {
       return res.status(400).json({ message: 'Doctor name and specialty are required.' });
@@ -261,6 +263,7 @@ app.post('/api/doctors', async (req, res) => {
       fee: Number(fee || 1500),
       timing: timing || timings || '09:00 AM - 05:00 PM',
       image: image || 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=700&q=80',
+      active: !['false', '0', 'inactive'].includes(String(active).toLowerCase()),
     });
 
     const doctorUser = await User.create({
@@ -387,11 +390,17 @@ app.delete('/api/appointments/:id', async (req, res) => {
 
 app.put('/api/doctors/:id', async (req, res) => {
   try {
-    const allowed = ['name', 'email', 'phone', 'specialty', 'qualification', 'hospital', 'fee', 'timing', 'image'];
+    const allowed = ['name', 'email', 'phone', 'specialty', 'qualification', 'hospital', 'fee', 'timing', 'timings', 'image', 'active'];
     const changes = {};
     allowed.forEach((key) => {
-      if (req.body[key] !== undefined) changes[key] = key === 'fee' ? Number(req.body[key]) : req.body[key];
+      if (req.body[key] !== undefined) changes[key] = key === 'fee'
+        ? Number(req.body[key])
+        : key === 'active'
+          ? !['false', '0', 'inactive'].includes(String(req.body[key]).toLowerCase())
+          : req.body[key];
     });
+    if (changes.timings !== undefined && changes.timing === undefined) changes.timing = changes.timings;
+    delete changes.timings;
     const doctor = await Doctor.findByIdAndUpdate(req.params.id, changes, { new: true, runValidators: true });
     if (!doctor) return res.status(404).json({ message: 'Doctor not found.' });
     if (changes.name || changes.email || changes.phone) {
