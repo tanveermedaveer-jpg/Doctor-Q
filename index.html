@@ -479,27 +479,62 @@
          </div>
         </section>
 
-        <section class="admin-dashboard hidden" id="admin-dashboard" aria-hidden="true">
+        <section class="dashboard hidden" id="admin-dashboard" aria-hidden="true">
           <div class="container">
-            <div class="section-header">
-              <span class="section-kicker">Super Admin</span>
-              <h2>Admin Dashboard</h2>
-              <p>Manage Doctor Q operations and monitor platform activity.</p>
+            <div class="dashboard-heading">
+              <div>
+                <span class="section-kicker">Super Admin</span>
+                <h2>Admin Dashboard</h2>
+                <p>Manage doctors, credentials, and appointment activity.</p>
+              </div>
+              <button type="button" class="btn btn-secondary dashboard-home-btn">Back to site</button>
             </div>
-            <div class="admin-dashboard-grid">
-              <article class="admin-stat-card">
-                <span>Total Doctors</span>
-                <strong>50</strong>
+            <div class="admin-dashboard-grid dashboard-stats">
+              <article class="admin-stat-card"><span>Total Doctors</span><strong id="admin-doctor-count">0</strong></article>
+              <article class="admin-stat-card"><span>Registered Patients</span><strong id="admin-patient-count">—</strong></article>
+              <article class="admin-stat-card"><span>Pending Appointments</span><strong id="admin-pending-count">0</strong></article>
+            </div>
+            <div class="dashboard-columns">
+              <article class="dashboard-card">
+                <div class="card-heading"><div><span class="section-kicker small">New Provider</span><h3>Add Doctor</h3></div></div>
+                <form id="add-doctor-form" class="dashboard-form">
+                  <div class="form-grid">
+                    <label><span>Full Name</span><input name="name" required placeholder="Dr. Ayesha Khan" /></label>
+                    <label><span>Specialty</span><input name="specialty" required placeholder="Cardiology" /></label>
+                    <label><span>Assigned Email</span><input type="email" name="email" placeholder="doctor@example.com" /></label>
+                    <label><span>Assigned Password</span><input type="password" name="password" placeholder="Temporary password" /></label>
+                    <label><span>Hospital / Area</span><input name="hospital" value="D.I. Khan" /></label>
+                    <label><span>Consultation fee (PKR)</span><input type="number" min="0" name="fee" value="1500" /></label>
+                    <label><span>Clinic timings</span><input name="timing" value="09:00 AM - 05:00 PM" /></label>
+                    <label><span>Image URL</span><input type="url" name="image" placeholder="https://example.com/doctor.jpg" /></label>
+                  </div>
+                  <button class="btn btn-primary" type="submit">Add Doctor &amp; Generate Credentials</button>
+                </form>
+                <div id="doctor-credentials" class="credentials-box hidden" aria-live="polite"></div>
               </article>
-              <article class="admin-stat-card">
-                <span>Registered Patients</span>
-                <strong>10,000+</strong>
-              </article>
-              <article class="admin-stat-card">
-                <span>Pending Appointments</span>
-                <strong>24</strong>
+              <article class="dashboard-card">
+                <div class="card-heading"><div><span class="section-kicker small">Provider Directory</span><h3>Manage Doctors</h3></div></div>
+                <div class="table-scroll"><table class="data-table" id="doctors-table"><thead><tr><th>Doctor</th><th>Specialty</th><th>Clinic</th><th>Credentials</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5">Loading doctors…</td></tr></tbody></table></div>
               </article>
             </div>
+            <article class="dashboard-card">
+              <div class="card-heading"><div><span class="section-kicker small">Operations</span><h3>Appointments</h3></div></div>
+              <div class="table-scroll"><table class="data-table" id="admin-appointments-table"><thead><tr><th>Patient</th><th>Doctor</th><th>Date &amp; time</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5">Loading appointments…</td></tr></tbody></table></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="dashboard hidden" id="doctor-dashboard" aria-hidden="true">
+          <div class="container">
+            <div class="dashboard-heading"><div><span class="section-kicker">Doctor Portal</span><h2 id="doctor-dashboard-title">Doctor Dashboard</h2><p>Review and update your patient appointments.</p></div><button type="button" class="btn btn-secondary dashboard-home-btn">Back to site</button></div>
+            <article class="dashboard-card"><div class="card-heading"><div><span class="section-kicker small">Schedule</span><h3>My Appointments</h3></div></div><div class="table-scroll"><table class="data-table" id="doctor-appointments-table"><thead><tr><th>Patient</th><th>Date &amp; time</th><th>Contact</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td colspan="5">Loading appointments…</td></tr></tbody></table></div></article>
+          </div>
+        </section>
+
+        <section class="dashboard hidden" id="patient-dashboard" aria-hidden="true">
+          <div class="container">
+            <div class="dashboard-heading"><div><span class="section-kicker">Patient Portal</span><h2 id="patient-dashboard-title">My Dashboard</h2><p>Track your appointments and book trusted local care.</p></div><button type="button" class="btn btn-primary patient-book-btn" data-scroll-target="doctor-listings">Book an appointment</button></div>
+            <article class="dashboard-card"><div class="card-heading"><div><span class="section-kicker small">Your care</span><h3>My Appointments</h3></div></div><div class="table-scroll"><table class="data-table" id="patient-appointments-table"><thead><tr><th>Doctor</th><th>Date &amp; time</th><th>Specialty</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td colspan="5">Loading appointments…</td></tr></tbody></table></div></article>
           </div>
         </section>
 

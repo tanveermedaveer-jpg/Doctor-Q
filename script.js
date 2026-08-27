@@ -10,22 +10,31 @@ const state = {
   loadingDoctors: false,
   activeAuthRole: 'Patient',
   authMode: 'signin',
+  currentUser: null,
+  appointments: [],
 };
 
 const homepageSections = ['.hero', '.areas-section', '.specialties', '.featured-doctors', '.emergency-footer'];
+const dashboardIds = ['admin-dashboard', 'doctor-dashboard', 'patient-dashboard'];
+const ADMIN_EMAIL = 'muhammadsadaf010@gmail.com';
+const ADMIN_PASSWORD = 'Sadaf@9099';
 
-const updateAdminNavigation = (isAdmin) => {
+const updateAuthenticatedNavigation = (user = null) => {
   const navActions = document.querySelector('.nav-actions');
   const mainNav = document.querySelector('.main-nav');
+  const mobileMenu = document.getElementById('mobile-menu');
   if (!navActions || !mainNav) return;
 
-  if (isAdmin) {
-    mainNav.innerHTML = '<a href="#admin-dashboard" data-scroll-target="admin-dashboard">Admin Dashboard</a>';
+  if (user) {
+    const dashboardId = `${String(user.role || 'Patient').toLowerCase()}-dashboard`;
+    mainNav.innerHTML = `<a href="#${dashboardId}" data-scroll-target="${dashboardId}">Dashboard</a>`;
     navActions.innerHTML = `
-      <button class="btn btn-primary admin-dashboard-nav-btn" type="button" data-scroll-target="admin-dashboard">Admin Dashboard</button>
+      <button class="btn btn-primary dashboard-nav-btn" type="button" data-scroll-target="${dashboardId}">Dashboard</button>
       <button class="btn btn-ghost sign-out-btn" type="button">Sign Out</button>
     `;
-    navActions.querySelector('.sign-out-btn')?.addEventListener('click', exitAdminDashboard);
+    navActions.querySelector('.sign-out-btn')?.addEventListener('click', signOut);
+    if (mobileMenu) mobileMenu.innerHTML = `<a href="#${dashboardId}" data-scroll-target="${dashboardId}">Dashboard</a><button type="button" class="mobile-sign-out">Sign Out</button>`;
+    mobileMenu?.querySelector('.mobile-sign-out')?.addEventListener('click', signOut);
     setupNavigation();
     return;
   }
@@ -38,28 +47,45 @@ const updateAdminNavigation = (isAdmin) => {
     <a href="#emergency-footer" data-scroll-target="emergency-footer">Support</a>
   `;
   navActions.innerHTML = '<button class="btn btn-ghost sign-in-btn" type="button" data-modal-target="signin-modal">Sign In</button><button class="btn btn-primary nav-book-btn" type="button" data-scroll-target="doctor-listings">Book Now</button>';
+  if (mobileMenu) mobileMenu.innerHTML = '<a href="#top" data-scroll-target="top">Home</a><a href="#specialty-section" data-scroll-target="specialty-section">Specialists</a><a href="#areas-section" data-scroll-target="areas-section">Hospitals</a><a href="#doctor-listings" data-scroll-target="doctor-listings">Reviews</a><a href="#emergency-footer" data-scroll-target="emergency-footer">Support</a>';
   setupNavigation();
 };
 
-const enterAdminDashboard = () => {
-  localStorage.setItem('adminToken', 'true');
+const showDashboard = (role, user = state.currentUser) => {
+  state.currentUser = user;
   homepageSections.forEach((selector) => document.querySelector(selector)?.classList.add('hidden'));
-  const dashboard = document.getElementById('admin-dashboard');
-  dashboard?.classList.remove('hidden');
-  dashboard?.setAttribute('aria-hidden', 'false');
-  updateAdminNavigation(true);
-  scrollToSection('admin-dashboard');
+  dashboardIds.forEach((id) => {
+    const dashboard = document.getElementById(id);
+    const active = id === `${String(role).toLowerCase()}-dashboard`;
+    dashboard?.classList.toggle('hidden', !active);
+    dashboard?.setAttribute('aria-hidden', String(!active));
+  });
+  updateAuthenticatedNavigation(user);
+  if (role === 'Admin') loadAdminDashboard();
+  if (role === 'Doctor') loadDoctorDashboard();
+  if (role === 'Patient') loadPatientDashboard();
+  scrollToSection(`${String(role).toLowerCase()}-dashboard`);
 };
 
-function exitAdminDashboard() {
+const enterAdminDashboard = (user = state.currentUser) => {
+  localStorage.setItem('doctorQDashboard', 'Admin');
+  showDashboard('Admin', user || { name: 'Super Admin', role: 'Admin', email: ADMIN_EMAIL });
+};
+
+function signOut() {
   localStorage.removeItem('adminToken');
+  localStorage.removeItem('doctorQToken');
+  localStorage.removeItem('doctorQUser');
+  localStorage.removeItem('doctorQDashboard');
+  state.currentUser = null;
   homepageSections.forEach((selector) => document.querySelector(selector)?.classList.remove('hidden'));
-  const dashboard = document.getElementById('admin-dashboard');
-  dashboard?.classList.add('hidden');
-  dashboard?.setAttribute('aria-hidden', 'true');
-  updateAdminNavigation(false);
+  dashboardIds.forEach((id) => document.getElementById(id)?.classList.add('hidden'));
+  updateAuthenticatedNavigation(null);
   scrollToSection('top');
+  showToast('Signed out successfully.');
 }
+
+const exitAdminDashboard = signOut;
 
 const setupAreasToggle = () => {
   const areaGrid = document.querySelector('.area-grid');
@@ -201,18 +227,21 @@ const updateAuthRoleUI = () => {
 
   const modeToggle = document.getElementById('auth-mode-toggle');
   const switchRow = document.querySelector('.auth-switch-row');
-  const isAdmin = state.activeAuthRole === 'Admin';
-  if (isAdmin && state.authMode === 'signup') {
+  const signupAllowed = state.activeAuthRole === 'Patient';
+  if (!signupAllowed && state.authMode === 'signup') {
     state.authMode = 'signin';
     updateAuthFormMode();
     return;
   }
-  if (modeToggle) modeToggle.hidden = isAdmin;
-  if (switchRow) switchRow.hidden = isAdmin;
+  if (modeToggle) modeToggle.hidden = !signupAllowed;
+  if (switchRow) switchRow.hidden = !signupAllowed;
+  if (!signupAllowed && portalLabel) {
+    portalLabel.textContent = state.activeAuthRole === 'Doctor' ? 'Doctor credentials are issued by Admin' : 'Secure admin portal';
+  }
 };
 
 const updateAuthFormMode = () => {
-  const isSignup = state.authMode === 'signup';
+  const isSignup = state.authMode === 'signup' && state.activeAuthRole === 'Patient';
   const submitButton = document.getElementById('auth-submit-btn');
   const modeToggle = document.getElementById('auth-mode-toggle');
   const title = document.getElementById('signin-title');
@@ -407,13 +436,16 @@ const normalizeDoctorPayload = (doctor = {}) => {
   return {
     id: doctor.id || doctor._id || doctor.doctorId || doctorName,
     name: doctorName,
+    email: doctor.email || '',
+    phone: doctor.phone || '',
+    userId: doctor.userId || '',
     specialty,
     category: deriveDoctorCategory(specialty, doctor.category || doctor.categoryName || 'all'),
     clinic,
     area,
     fee: feeValue,
     qualification: doctor.qualification || doctor.qualifications || doctor.degree || 'MBBS',
-    timings: doctor.timings || doctor.schedule || doctor.availableTime || 'Flexible',
+    timings: doctor.timings || doctor.timing || doctor.schedule || doctor.availableTime || 'Flexible',
     rating: ratingValue,
     image:
       doctor.image ||
@@ -675,6 +707,219 @@ const searchDoctors = async (specialtyValue = '', areaValue = '') => {
   }
 };
 
+const getStored = (key, fallback) => {
+  try {
+    const value = JSON.parse(localStorage.getItem(key) || 'null');
+    return value === null ? fallback : value;
+  } catch (error) {
+    return fallback;
+  }
+};
+
+const setStored = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+
+const apiRequest = async (path, options = {}) => {
+  const headers = { Accept: 'application/json', ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...(options.headers || {}) };
+  const token = localStorage.getItem('doctorQToken');
+  if (token && token !== 'true') headers.Authorization = `Bearer ${token}`;
+  const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.message || 'Request failed.');
+  return payload;
+};
+
+const localAppointments = () => getStored('doctorQAppointments', []);
+const saveAppointments = (appointments) => {
+  state.appointments = appointments;
+  setStored('doctorQAppointments', appointments);
+};
+
+const appointmentDate = (appointment) => [appointment.date || appointment.preferredDate, appointment.timeSlot].filter(Boolean).join(' · ') || 'Not scheduled';
+const statusBadge = (status) => `<span class="status-badge status-${String(status || 'Pending').toLowerCase()}">${status || 'Pending'}</span>`;
+
+const loadAppointments = async (query = '') => {
+  try {
+    const result = await apiRequest(`/appointments${query}`);
+    const list = Array.isArray(result) ? result : result.appointments || result.data || [];
+    state.appointments = list;
+    saveAppointments(list);
+    return list;
+  } catch (error) {
+    const list = localAppointments();
+    state.appointments = list;
+    return list;
+  }
+};
+
+const renderAdminDoctors = () => {
+  const body = document.querySelector('#doctors-table tbody');
+  if (!body) return;
+  const doctors = state.doctors.length ? state.doctors : getStored('doctorQDoctors', []);
+  body.innerHTML = doctors.length ? doctors.map((doctor) => `
+    <tr data-doctor-id="${doctor.id}">
+      <td><strong>${doctor.name}</strong><small>${doctor.email || '—'}</small></td>
+      <td>${doctor.specialty}</td><td>${doctor.clinic || doctor.hospital || 'D.I. Khan'}</td>
+      <td>${doctor.email ? `<button class="table-link copy-credential" type="button" data-copy="${doctor.email}">Copy email</button>` : 'Generated on add'}</td>
+      <td class="table-actions"><button type="button" class="table-link edit-doctor" data-id="${doctor.id}">Edit</button><button type="button" class="table-link danger delete-doctor" data-id="${doctor.id}">Delete</button></td>
+    </tr>`).join('') : '<tr><td colspan="5">No doctors found.</td></tr>';
+};
+
+const renderAppointmentsTable = (selector, appointments, role) => {
+  const body = document.querySelector(`${selector} tbody`);
+  if (!body) return;
+  if (!appointments.length) {
+    body.innerHTML = '<tr><td colspan="5">No appointments yet.</td></tr>';
+    return;
+  }
+  body.innerHTML = appointments.map((appointment) => {
+    const id = appointment.id || appointment._id || '';
+    const action = role === 'patient'
+      ? `<button type="button" class="table-link cancel-appointment" data-id="${id}">Cancel</button>`
+      : `<select class="status-select" data-id="${id}"><option ${appointment.status === 'Pending' ? 'selected' : ''}>Pending</option><option ${appointment.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option><option ${appointment.status === 'Completed' ? 'selected' : ''}>Completed</option><option ${appointment.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option><option ${appointment.status === 'Rejected' ? 'selected' : ''}>Rejected</option></select>`;
+    if (role === 'admin') {
+      return `<tr><td><strong>${appointment.patientName}</strong><small>${appointment.patientPhone || ''}</small></td><td>${appointment.doctorName}</td><td>${appointmentDate(appointment)}</td><td>${statusBadge(appointment.status)}</td><td>${action}</td></tr>`;
+    }
+    if (role === 'doctor') {
+      return `<tr><td><strong>${appointment.patientName}</strong></td><td>${appointmentDate(appointment)}</td><td>${appointment.patientPhone || appointment.patientEmail || '—'}</td><td>${statusBadge(appointment.status)}</td><td>${action}</td></tr>`;
+    }
+    return `<tr><td>${appointment.doctorName}</td><td>${appointmentDate(appointment)}</td><td>${appointment.specialty || '—'}</td><td>${statusBadge(appointment.status)}</td><td>${action}</td></tr>`;
+  }).join('');
+};
+
+const loadAdminDashboard = async () => {
+  try {
+    const payload = await apiRequest('/doctors');
+    state.doctors = extractDoctorList(payload);
+    setStored('doctorQDoctors', state.doctors);
+  } catch (error) {
+    state.doctors = getStored('doctorQDoctors', state.doctors);
+  }
+  renderAdminDoctors();
+  const appointments = await loadAppointments();
+  renderAppointmentsTable('#admin-appointments-table', appointments, 'admin');
+  const count = document.getElementById('admin-doctor-count');
+  const patients = document.getElementById('admin-patient-count');
+  const pending = document.getElementById('admin-pending-count');
+  if (count) count.textContent = state.doctors.length;
+  if (patients) patients.textContent = getStored('doctorQUsers', []).filter((user) => user.role === 'Patient').length;
+  if (pending) pending.textContent = appointments.filter((item) => String(item.status).toLowerCase() === 'pending').length;
+  try {
+    const stats = await apiRequest('/admin/stats');
+    if (count) count.textContent = stats.doctors;
+    if (patients) patients.textContent = stats.patients;
+    if (pending) pending.textContent = stats.pendingAppointments;
+  } catch (error) {}
+};
+
+const loadDoctorDashboard = async () => {
+  const user = state.currentUser || {};
+  const title = document.getElementById('doctor-dashboard-title');
+  if (title) title.textContent = `${user.name || 'Doctor'}'s Dashboard`;
+  const appointments = await loadAppointments(`?doctorId=${encodeURIComponent(user.doctorId || user.id || '')}`);
+  renderAppointmentsTable('#doctor-appointments-table', appointments.filter((item) => !item.id?.toString().startsWith('local-') || String(item.doctorId) === String(user.doctorId || user.id)), 'doctor');
+};
+
+const loadPatientDashboard = async () => {
+  const user = state.currentUser || {};
+  const title = document.getElementById('patient-dashboard-title');
+  if (title) title.textContent = `${user.name || 'Patient'}'s Dashboard`;
+  const appointments = await loadAppointments(`?patientEmail=${encodeURIComponent(user.email || '')}`);
+  renderAppointmentsTable('#patient-appointments-table', appointments.filter((item) => String(item.patientEmail || '').toLowerCase() === String(user.email || '').toLowerCase() || String(item.patientId) === String(user.id)), 'patient');
+};
+
+const updateAppointmentStatus = async (id, status) => {
+  const appointments = localAppointments().map((item) => String(item.id || item._id) === String(id) ? { ...item, status } : item);
+  saveAppointments(appointments);
+  try {
+    await apiRequest(`/appointments/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) });
+  } catch (error) {
+    // Local persistence keeps the dashboard usable when the API is unavailable.
+  }
+  showToast(`Appointment marked ${status.toLowerCase()}.`);
+  if (state.currentUser?.role === 'Admin') loadAdminDashboard();
+  if (state.currentUser?.role === 'Doctor') loadDoctorDashboard();
+};
+
+const setupDashboardActions = () => {
+  document.querySelectorAll('.dashboard-home-btn').forEach((button) => button.addEventListener('click', signOut));
+  document.querySelectorAll('.patient-book-btn').forEach((button) => button.addEventListener('click', () => {
+    homepageSections.forEach((selector) => document.querySelector(selector)?.classList.remove('hidden'));
+    dashboardIds.forEach((id) => document.getElementById(id)?.classList.add('hidden'));
+    scrollToSection('doctor-listings');
+  }));
+  document.addEventListener('change', (event) => {
+    if (event.target.matches('.status-select')) updateAppointmentStatus(event.target.dataset.id, event.target.value);
+  });
+  document.addEventListener('click', async (event) => {
+    const deleteButton = event.target.closest('.delete-doctor');
+    const editButton = event.target.closest('.edit-doctor');
+    const cancelButton = event.target.closest('.cancel-appointment');
+    const copyButton = event.target.closest('.copy-credential');
+    if (copyButton) {
+      await navigator.clipboard?.writeText(copyButton.dataset.copy);
+      showToast('Doctor email copied.');
+    }
+    if (deleteButton && window.confirm('Delete this doctor and their account?')) {
+      try { await apiRequest(`/doctors/${deleteButton.dataset.id}`, { method: 'DELETE' }); } catch (error) {}
+      const doctors = getStored('doctorQDoctors', []).filter((doctor) => String(doctor.id) !== String(deleteButton.dataset.id));
+      setStored('doctorQDoctors', doctors); state.doctors = doctors; renderAdminDoctors(); showToast('Doctor deleted.');
+    }
+    if (editButton) {
+      const doctor = state.doctors.find((item) => String(item.id) === String(editButton.dataset.id));
+      if (!doctor) return;
+      const name = window.prompt('Doctor name', doctor.name);
+      const specialty = name && window.prompt('Specialty', doctor.specialty);
+      if (!name || !specialty) return;
+      try { await apiRequest(`/doctors/${editButton.dataset.id}`, { method: 'PUT', body: JSON.stringify({ name, specialty }) }); } catch (error) {}
+      Object.assign(doctor, { name, specialty }); setStored('doctorQDoctors', state.doctors); renderAdminDoctors(); showToast('Doctor updated.');
+    }
+    if (cancelButton) updateAppointmentStatus(cancelButton.dataset.id, 'Cancelled');
+  });
+};
+
+const setupAdminForm = () => {
+  const form = document.getElementById('add-doctor-form');
+  if (!form) return;
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+    const button = form.querySelector('button[type="submit"]');
+    button.disabled = true;
+    try {
+      let doctor;
+      let credentials;
+      try {
+        const result = await apiRequest('/doctors', { method: 'POST', body: JSON.stringify(data) });
+        doctor = normalizeDoctorPayload(result.doctor || result);
+        credentials = result.credentials;
+      } catch (error) {
+        const id = `local-${Date.now()}`;
+        credentials = { email: data.email || `${data.name.toLowerCase().replace(/[^a-z0-9]+/g, '.')}@doctorq.pk`, password: data.password || `DQ-${Math.random().toString(36).slice(2, 8).toUpperCase()}!` };
+        const user = { id, doctorId: id, name: data.name, email: credentials.email, password: credentials.password, role: 'Doctor' };
+        const users = getStored('doctorQUsers', []);
+        users.push(user); setStored('doctorQUsers', users);
+        doctor = normalizeDoctorPayload({ ...data, id });
+      }
+      const doctors = getStored('doctorQDoctors', []);
+      doctors.unshift(doctor); setStored('doctorQDoctors', doctors);
+      state.doctors = [doctor, ...state.doctors.filter((item) => String(item.id) !== String(doctor.id))];
+      renderAdminDoctors();
+      const credentialsBox = document.getElementById('doctor-credentials');
+      if (credentialsBox) {
+        credentialsBox.classList.remove('hidden');
+        credentialsBox.innerHTML = `<strong>Doctor account created</strong><span>Email: <b>${credentials?.email || doctor.email}</b></span><span>Temporary password: <b>${credentials?.password || 'Set by doctor'}</b></span><small>Share these credentials securely with the doctor.</small>`;
+      }
+      form.reset();
+      showToast('Doctor added and credentials generated.');
+      loadAdminDashboard();
+    } catch (error) {
+      showToast(error.message || 'Unable to add doctor.', 'error');
+    } finally {
+      button.disabled = false;
+    }
+  });
+};
+
 const setupNavigation = () => {
   document.querySelectorAll('[data-scroll-target]').forEach((button) => {
     button.addEventListener('click', (event) => {
@@ -833,28 +1078,26 @@ const setupModals = () => {
         doctorName: doctor?.name || document.getElementById('booking-title')?.textContent || '',
         specialty: document.getElementById('booking-specialty')?.textContent || '',
         hospital: document.getElementById('booking-clinic')?.textContent || '',
-        patientName: formPayload.get('patientName') || '',
-        mobileNumber: formPayload.get('mobileNumber') || '',
-        preferredDate: formPayload.get('preferredDate') || '',
+        patientName: formPayload.get('fullName') || '',
+        patientPhone: formPayload.get('phone') || '',
+        patientEmail: state.currentUser?.email || '',
+        patientId: state.currentUser?.id || '',
+        date: formPayload.get('date') || '',
         timeSlot: formPayload.get('timeSlot') || '',
         gender: formPayload.get('gender') || 'Male',
         appointmentType: formPayload.get('appointmentType') || 'In-Clinic Visit',
-        problem: formPayload.get('problem') || '',
+        problem: formPayload.get('description') || '',
       };
 
-      const response = await fetch(`${API_BASE_URL}/appointments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(result.message || 'Unable to book appointment right now.');
+      let result;
+      try {
+        result = await apiRequest('/appointments', { method: 'POST', body: JSON.stringify(payload) });
+      } catch (error) {
+        const localAppointment = { ...payload, id: `local-appointment-${Date.now()}`, status: 'Pending', createdAt: new Date().toISOString() };
+        saveAppointments([localAppointment, ...localAppointments()]);
+        result = { message: 'Appointment saved locally and will sync when available.', appointment: localAppointment };
       }
+      if (result.appointment) saveAppointments([result.appointment, ...localAppointments().filter((item) => String(item.id || item._id) !== String(result.appointment.id || result.appointment._id))]);
 
       submitButton.textContent = 'Confirmed';
       showToast(result.message || `Appointment requested with ${doctor?.name || 'doctor'}.`);
@@ -879,6 +1122,10 @@ const setupModals = () => {
     const submitButton = signInForm.querySelector('#auth-submit-btn');
     const originalText = submitButton?.textContent || 'Submit';
     const isSignup = state.authMode === 'signup';
+    if (isSignup && state.activeAuthRole !== 'Patient') {
+      showToast('Only patients can create an account. Doctor access is provided by Admin.', 'error');
+      return;
+    }
     const formData = new FormData(signInForm);
     const payload = {
       role: state.activeAuthRole,
@@ -896,39 +1143,41 @@ const setupModals = () => {
 
     try {
       let result;
-      if (!isSignup && payload.role === 'Admin' &&
-          payload.email === 'muhammadsadaf010@gmail.com' &&
-          payload.password === 'Sadaf@9099') {
+      if (!isSignup && payload.role === 'Admin' && payload.email.toLowerCase() === ADMIN_EMAIL && payload.password === ADMIN_PASSWORD) {
         result = {
           message: 'Super Admin login successful. Admin Dashboard access granted.',
-          user: { name: 'Super Admin', email: payload.email, role: 'Admin' },
+          token: 'true',
+          user: { id: 'super-admin', name: 'Super Admin', email: payload.email, role: 'Admin' },
         };
       } else {
-        const endpoint = isSignup ? `${API_BASE_URL}/auth/register` : `${API_BASE_URL}/auth/login`;
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
-
-        result = await response.json().catch(() => ({}));
-        if (!response.ok) {
-          throw new Error(result.message || `Unable to ${isSignup ? 'create account' : 'sign in'} right now.`);
+        const endpoint = isSignup ? '/auth/register' : '/auth/login';
+        const requestPayload = isSignup
+          ? { ...payload, name: payload.fullName, phone: payload.phoneNumber }
+          : payload;
+        try {
+          result = await apiRequest(endpoint, { method: 'POST', body: JSON.stringify(requestPayload) });
+        } catch (error) {
+          const users = getStored('doctorQUsers', []);
+          if (isSignup) {
+            if (users.some((user) => user.email.toLowerCase() === payload.email.toLowerCase())) throw new Error('User already exists with this email address.');
+            const user = { id: `local-user-${Date.now()}`, name: payload.fullName, email: payload.email.toLowerCase(), password: payload.password, phone: payload.phoneNumber || '', role: 'Patient' };
+            users.push(user); setStored('doctorQUsers', users);
+            result = { message: 'Patient account created successfully.', user };
+          } else {
+            const user = users.find((item) => item.email.toLowerCase() === payload.email.toLowerCase() && item.password === payload.password && item.role === payload.role);
+            if (!user) throw error;
+            result = { message: `${user.role} login successful.`, user };
+          }
         }
       }
 
       if (result.token) localStorage.setItem('doctorQToken', result.token);
-      if (!isSignup && payload.role === 'Admin' &&
-          payload.email === 'muhammadsadaf010@gmail.com' &&
-          payload.password === 'Sadaf@9099') {
-        enterAdminDashboard();
-      }
       if (result.user) {
         localStorage.setItem('doctorQUser', JSON.stringify(result.user));
+        localStorage.setItem('doctorQDashboard', result.user.role);
+        state.currentUser = result.user;
         document.body.dataset.authenticatedRole = result.user.role;
+        showDashboard(result.user.role, result.user);
       }
       showToast(result.message || (isSignup ? 'Account created successfully.' : 'Signed in successfully.'));
       closeModalById('signin-modal');
@@ -1052,10 +1301,16 @@ const init = async () => {
   setupAreaCards();
   setupAreasToggle();
   setupSpecialtyModal();
+  setupDashboardActions();
+  setupAdminForm();
   updateAuthFormMode();
   setFilterSelection('all');
 
-  if (localStorage.getItem('adminToken') === 'true') {
+  const savedUser = getStored('doctorQUser', null);
+  if (savedUser?.role) {
+    state.currentUser = savedUser;
+    showDashboard(savedUser.role, savedUser);
+  } else if (localStorage.getItem('adminToken') === 'true') {
     enterAdminDashboard();
   }
 
@@ -1065,7 +1320,17 @@ const init = async () => {
   } catch (error) {
     showToast(error.message || 'Unable to load doctors right now.', 'error');
     setDoctorLoadingState(false);
-    renderDoctorCards([]);
+    const localDoctors = getStored('doctorQDoctors', []);
+    state.doctors = localDoctors.length ? localDoctors : Array.from(document.querySelectorAll('.doctor-card')).map((card) => normalizeDoctorPayload({
+      id: card.dataset.doctorName,
+      name: card.dataset.doctorName,
+      specialty: card.dataset.specialty,
+      hospital: card.dataset.clinic,
+      area: card.dataset.area,
+      fee: card.dataset.fee,
+      image: card.dataset.image,
+    }));
+    renderDoctorCards(state.doctors);
   }
 };
 
