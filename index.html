@@ -515,7 +515,7 @@
                     <label><span>Full Name</span><input name="name" required placeholder="Dr. Ayesha Khan" /></label>
                     <label><span>Specialty</span><input name="specialty" required placeholder="Cardiology" /></label>
                     <label><span>Assigned Email</span><input type="email" name="email" placeholder="doctor@example.com" /></label>
-                    <label><span>Assigned Password</span><input type="password" name="password" placeholder="Temporary password" /></label>
+                    <label><span>Assigned Password</span><div class="password-input"><input type="password" name="password" placeholder="Temporary password" /><button type="button" class="password-toggle" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" /><circle cx="12" cy="12" r="2.5" /></svg></button></div></label>
                     <label><span>Hospital / Area</span><input name="hospital" value="D.I. Khan" /></label>
                     <label><span>Consultation fee (PKR)</span><input type="number" min="0" name="fee" value="1500" /></label>
                     <label><span>Clinic timings</span><input name="timing" value="09:00 AM - 05:00 PM" /></label>
@@ -659,7 +659,7 @@
                 </label>
                 <label>
                   <span>Password</span>
-                  <input type="password" name="password" placeholder="Enter your password" required />
+                  <div class="password-input"><input type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required /><button type="button" class="password-toggle" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" /><circle cx="12" cy="12" r="2.5" /></svg></button></div>
                 </label>
               </div>
               <div class="auth-switch-row">

@@ -105,6 +105,20 @@ const setupAreasToggle = () => {
   });
 };
 
+const setupPasswordToggles = () => {
+  document.querySelectorAll('.password-toggle').forEach((button) => {
+    button.addEventListener('click', () => {
+      const input = button.closest('.password-input')?.querySelector('input');
+      if (!input) return;
+      const isVisible = input.type === 'text';
+      input.type = isVisible ? 'password' : 'text';
+      button.setAttribute('aria-label', isVisible ? 'Show password' : 'Hide password');
+      button.setAttribute('aria-pressed', String(!isVisible));
+      button.classList.toggle('is-visible', !isVisible);
+    });
+  });
+};
+
 const specialtyCatalog = [
   { name: 'Cardiology', category: 'cardiologists', icon: '💙', description: 'Heart Care' },
   { name: 'Pediatrics', category: 'pediatricians', icon: '🧒', description: 'Child Specialist' },
@@ -1309,6 +1323,7 @@ const init = async () => {
   setupFooterActions();
   setupAreaCards();
   setupAreasToggle();
+  setupPasswordToggles();
   setupSpecialtyModal();
   setupDashboardActions();
   setupAdminForm();
