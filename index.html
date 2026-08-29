@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor Q | Healthcare Platform</title>
+    <meta
+      name="description"
+      content="D.I. Khan's Premier Online Healthcare & Doctor Appointment Platform. Book appointments with top doctors online."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell" id="top">
+      <header class="topbar">
+        <div class="container nav">
+          <div class="brand" aria-label="Doctor Q logo and brand name">
+            <div class="brand-mark">
+              <span class="cross"></span>
+            </div>
+            <div class="brand-text">
+              <span class="brand-name">Doctor Q</span>
+              <small>D.I. Khan's Premier Online Healthcare</small>
+            </div>
+          </div>
+
+          <nav class="main-nav" aria-label="Main navigation">
+            <a href="#top" data-scroll-target="top">Home</a>
+            <a href="#specialty-section" data-scroll-target="specialty-section">Specialists</a>
+            <a href="#areas-section" data-scroll-target="areas-section">Hospitals</a>
+            <a href="#doctor-listings" data-scroll-target="doctor-listings">Reviews</a>
+            <a href="#emergency-footer" data-scroll-target="emergency-footer">Support</a>
+          </nav>
+
+          <div class="nav-actions">
+            <button class="btn btn-ghost sign-in-btn" type="button" data-modal-target="signin-modal">Sign In</button>
+            <button class="btn btn-primary nav-book-btn" type="button" data-scroll-target="doctor-listings">Book Now</button>
+          </div>
+
+          <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+        <div class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation">
+          <a href="#top" data-scroll-target="top">Home</a>
+          <a href="#specialty-section" data-scroll-target="specialty-section">Specialists</a>
+          <a href="#areas-section" data-scroll-target="areas-section">Hospitals</a>
+          <a href="#doctor-listings" data-scroll-target="doctor-listings">Reviews</a>
+          <a href="#emergency-footer" data-scroll-target="emergency-footer">Support</a>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="hero-bg"></div>
+          <div class="container hero-grid">
+            <div class="hero-content reveal">
+              <div class="mini-badge">
+                <span class="pulse-dot"></span>
+                Trusted local healthcare network
+              </div>
+
+              <h1>Book Appointments with D.I. Khan's Top Doctors Online</h1>
+              <p class="subheading">
+                Easily find trusted specialists, check clinic timings across D.I. Khan,
+                and book your appointment hassle-free.
+              </p>
+
+              <form class="search-panel" aria-label="Doctor search filter">
+                <div class="field">
+                  <label for="specialty-search">Select Specialty</label>
+                  <input id="specialty-search" name="specialty" list="specialty-options" placeholder="Type or choose specialty" value="" />
+                </div>
+
+                <div class="field">
+                  <label for="area-search">Select Area/Hospital</label>
+                  <input id="area-search" name="area" list="area-options" placeholder="Type or choose area" value="" />
+                </div>
+
+                <button type="submit" class="btn btn-primary search-btn">Search Doctor</button>
+              </form>
+
+              <datalist id="specialty-options">
+                <option value="Cardiology"></option>
+                <option value="Pediatrics"></option>
+                <option value="Gynecology"></option>
+                <option value="Orthopedics"></option>
+                <option value="Dermatology"></option>
+                <option value="Ophthalmology"></option>
+                <option value="Neurology"></option>
+                <option value="General Medicine"></option>
+                <option value="ENT"></option>
+                <option value="Dental Care"></option>
+                <option value="Urology"></option>
+                <option value="Endocrinology"></option>
+                <option value="Gastroenterology"></option>
+                <option value="Psychiatry"></option>
+                <option value="Pulmonology"></option>
+                <option value="Oncology"></option>
+                <option value="General Physician"></option>
+              </datalist>
+
+              <datalist id="area-options">
+                <option value="Circular Road"></option>
+                <option value="Thall Road"></option>
+                <option value="Zafarabad"></option>
+                <option value="Cantonment"></option>
+                <option value="City Hospital D.I. Khan"></option>
+                <option value="DHQ Hospital D.I. Khan"></option>
+                <option value="Main Bazar"></option>
+                <option value="University Road"></option>
+              </datalist>
+
+              <div class="cta-row">
+                <button class="btn btn-primary hero-book-btn" type="button" data-scroll-target="doctor-listings">Book Now</button>
+                <button class="btn btn-secondary scroll-specialists-btn" type="button" data-scroll-target="specialty-section">Explore Specialists</button>
+              </div>
+
+              <div class="stats" aria-label="Platform statistics">
+                <div class="stat-item">
+                  <strong data-target="50">0</strong>
+                  <span>Verified Doctors in D.I. Khan</span>
+                </div>
+                <div class="stat-item">
+                  <strong data-target="10000">0</strong>
+                  <span>Happy Patients</span>
+                </div>
+                <div class="stat-item">
+                  <strong>24/7</strong>
+                  <span>Support Service</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-visual reveal">
+              <div class="photo-frame">
+                <div class="frame-glow"></div>
+                <img
+                  src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=900&q=80"
+                  alt="A smiling male doctor in a white coat with a stethoscope"
+                />
+                <div class="floating-card card-top">
+                  <span class="card-icon">✓</span>
+                  <div>
+                    <strong>Top Rated</strong>
+                    <small>Trusted by 2,000+ patients</small>
+                  </div>
+                </div>
+                <div class="floating-card card-bottom">
+                  <div class="badge-group">
+                    <span class="tiny-badge">4.9/5</span>
+                    <span class="tiny-badge green">Open Today</span>
+                  </div>
+                  <div class="mini-chart">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="areas-section reveal" id="areas-section">
+          <div class="container">
+            <div class="section-header">
+              <span class="section-kicker">Local Hospitals &amp; Areas</span>
+              <h2>Find Clinics Across D.I. Khan</h2>
+            </div>
+            <div class="area-grid">
+              <button type="button" class="area-card" data-area="Circular Road">Circular Road</button>
+              <button type="button" class="area-card" data-area="Thall Road">Thall Road</button>
+              <button type="button" class="area-card" data-area="Zafarabad">Zafarabad</button>
+              <button type="button" class="area-card" data-area="Cantonment">Cantonment</button>
+              <button type="button" class="area-card" data-area="City Hospital D.I. Khan">City Hospital D.I. Khan</button>
+              <button type="button" class="area-card" data-area="DHQ Hospital D.I. Khan">DHQ Hospital D.I. Khan</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="specialties reveal" id="specialty-section">
+          <div class="container">
+            <div class="section-header">
+              <span class="section-kicker">Healthcare Coverage</span>
+              <h2>Browse Top Specialties in D.I. Khan</h2>
+              <p>
+                Find expert doctors across various medical fields operating in local clinics
+                and hospitals.
+              </p>
+            </div>
+
+            <div class="specialty-grid" id="specialty-grid">
+              <article class="specialty-card reveal">
+                <div class="card-topline">
+                  <div class="icon-wrap heart">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.35-10.5-9.09C.74 9.38 2.5 4 7.11 4c2.6 0 3.96 1.54 4.89 2.7.93-1.16 2.29-2.7 4.89-2.7 4.61 0 6.37 5.38 5.61 7.91C19.5 16.65 12 21 12 21Z"/></svg>
+                  </div>
+                  <span class="status-tag">12+ Doctors</span>
+                </div>
+                <h3>Cardiology</h3>
+                <p>Heart Care</p>
+                <a href="#" class="specialty-view-btn" data-specialty-name="Cardiology">View Doctors <span aria-hidden="true">→</span></a>
+              </article>
+
+              <article class="specialty-card reveal">
+                <div class="card-topline">
+                  <div class="icon-wrap child">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 4.5a2.5 2.5 0 1 1 5 0v1.25h3.5a2.5 2.5 0 0 1 0 5H12.5V13a2 2 0 0 1-2 2H8.5A2 2 0 0 1 6.5 13v-2.25H4.5a2.5 2.5 0 0 1 0-5h2V4.5Zm3.5 9.5h1.5v2.5H11v-2.5Zm-5 2.5h1.5v2.5H6v-2.5Zm12 0h1.5v2.5H18v-2.5Z"/></svg>
+                  </div>
+                  <span class="status-tag">18+ Doctors</span>
+                </div>
+                <h3>Pediatrics</h3>
+                <p>Child Specialist</p>
+                <a href="#" class="specialty-view-btn" data-specialty-name="Pediatrics">View Doctors <span aria-hidden="true">→</span></a>
+              </article>
+
+              <article class="specialty-card reveal">
+                <div class="card-topline">
+                  <div class="icon-wrap gyne">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a4 4 0 0 0-4 4v1.2A3.6 3.6 0 0 1 10.55 11H13.45A3.6 3.6 0 0 1 16 8.2V7a4 4 0 0 0-4-4Zm-5 7.5A3.6 3.6 0 0 0 3.4 14.1v2.2a1.7 1.7 0 0 0 1.7 1.7h3.8a1.9 1.9 0 0 1-1.8-1.9V14.5h-1.4A2.1 2.1 0 0 1 7 12.4v-1.9Zm10 0h-1.4a2.1 2.1 0 0 1-2.1 2.1h-1.4v1.7a1.9 1.9 0 0 1-1.8 1.9h3.8a1.7 1.7 0 0 0 1.7-1.7v-2.2A3.6 3.6 0 0 0 17 10.5Zm-5 4.4a2.3 2.3 0 1 1 0 4.6 2.3 2.3 0 0 1 0-4.6Z"/></svg>
+                  </div>
+                  <span class="status-tag">10+ Doctors</span>
+                </div>
+                <h3>Gynecology</h3>
+                <p>Obstetrics</p>
+                <a href="#" class="specialty-view-btn" data-specialty-name="Gynecology">View Doctors <span aria-hidden="true">→</span></a>
+              </article>
+
+              <article class="specialty-card reveal">
+                <div class="card-topline">
+                  <div class="icon-wrap ortho">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5c0-1.1.9-2 2-2h6c1.1 0 2 .9 2 2v.5H7v-.5Zm3-13.5h4a2 2 0 0 1 2 2v4.8l2.2 2.2c.6.6.6 1.6 0 2.2l-.5.5a1.56 1.56 0 0 1-2.2 0L13 14.6V8.5h-2v6.1L7.5 18.7a1.56 1.56 0 0 1-2.2 0l-.5-.5a1.56 1.56 0 0 1 0-2.2L7 12.3V7a2 2 0 0 1 2-2Zm1 5.5h2v2h-2v-2Z"/></svg>
+                  </div>
+                  <span class="status-tag">9+ Doctors</span>
+                </div>
+                <h3>Orthopedics</h3>
+                <p>Bone &amp; Joint Care</p>
+                <a href="#" class="specialty-view-btn" data-specialty-name="Orthopedics">View Doctors <span aria-hidden="true">→</span></a>
+              </article>
+
+              <article class="specialty-card reveal">
+                <div class="card-topline">
+                  <div class="icon-wrap derm">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8c-1.7 0-3 .9-3.8 2.1-.6.9-1.3 1.9-2 2.7-.7.8-1.8 1.3-2.9 1.3a2.4 2.4 0 0 0 0 4.8c1.1 0 2.2.5 2.9 1.3.7.8 1.4 1.8 2 2.7.8 1.2 2.1 2.1 3.8 2.1s3-.9 3.8-2.1c.6-.9 1.3-1.9 2-2.7.7-.8 1.8-1.3 2.9-1.3a2.4 2.4 0 0 0 0-4.8c-1.1 0-2.2-.5-2.9-1.3-.7-.8-1.4-1.8-2-2.7C15.1 3.7 13.7 2.8 12 2.8Zm-1.9 7.8h3.8v3.8h-3.8V10.6Z"/></svg>
+                  </div>
+                  <span class="status-tag">14+ Doctors</span>
+                </div>
+                <h3>Dermatology</h3>
+                <p>Skin Care</p>
+                <a href="#" class="specialty-view-btn" data-specialty-name="Dermatology">View Doctors <span aria-hidden="true">→</span></a>
+              </article>
+
+              <article class="specialty-card reveal">
+                <div class="card-topline">
+                  <div class="icon-wrap eye">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.5C7.3 4.5 3.2 7.2 1.3 12c1.9 4.8 6 7.5 10.7 7.5S22.8 16.8 23 12c-1.8-4.8-6-7.5-11-7.5Zm0 2.2A5.3 5.3 0 0 1 17.3 12 5.3 5.3 0 0 1 12 17.3 5.3 5.3 0 0 1 6.7 12 5.3 5.3 0 0 1 12 6.7Zm0 2.1A3.2 3.2 0 0 0 8.8 12 3.2 3.2 0 0 0 12 15.2 3.2 3.2 0 0 0 15.2 12 3.2 3.2 0 0 0 12 8.8Z"/></svg>
+                  </div>
+                  <span class="status-tag">11+ Doctors</span>
+                </div>
+                <h3>Ophthalmology</h3>
+                <p>Eye Care</p>
+                <a href="#" class="specialty-view-btn" data-specialty-name="Ophthalmology">View Doctors <span aria-hidden="true">→</span></a>
+              </article>
+
+              <article class="specialty-card reveal">
+                <div class="card-topline">
+                  <div class="icon-wrap neuro">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 3.5c-2.3 0-4.2 1.9-4.2 4.2 0 1.4.7 2.8 1.9 3.5v2.5c0 1.1.9 2 2 2h2.1v2.1c0 1.1.9 2 2 2h.3c1.1 0 2-.9 2-2v-6.2h.8c2.2 0 4-1.8 4-4 0-2.3-1.8-4.1-4-4.1-.9 0-1.7.3-2.3.9-.7-.6-1.6-.9-2.6-.9-.8 0-1.6.2-2.2.7-.5-.5-1.2-.8-2-.8Zm.8 5.5h4.4v2H10.3v-2Z"/></svg>
+                  </div>
+                  <span class="status-tag">8+ Doctors</span>
+                </div>
+                <h3>Neurology</h3>
+                <p>Brain &amp; Spine</p>
+                <a href="#" class="specialty-view-btn" data-specialty-name="Neurology">View Doctors <span aria-hidden="true">→</span></a>
+              </article>
+
+              <article class="specialty-card reveal">
+                <div class="card-topline">
+                  <div class="icon-wrap med">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8a7 7 0 0 0-7 7c0 5.2 5.1 10.5 6.6 11.8a1.5 1.5 0 0 0 2.8 0c1.5-1.3 6.6-6.6 6.6-11.8a7 7 0 0 0-7-7Zm0 9.7a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4Zm-4.5-1.8h2.8v-2.8h3.4v2.8h2.8v3.4h-2.8v2.8H10.3v-2.8H7.5v-3.4Z"/></svg>
+                  </div>
+                  <span class="status-tag">20+ Doctors</span>
+                </div>
+                <h3>General Medicine</h3>
+                <p>Physician</p>
+                <a href="#" class="specialty-view-btn" data-specialty-name="General Medicine">View Doctors <span aria-hidden="true">→</span></a>
+              </article>
+            </div>
+
+            <div class="specialties-actions">
+              <button type="button" class="btn btn-secondary view-all-specialties" id="view-all-specialties">View All Specialties</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="featured-doctors" id="doctor-listings">
+         <div class="container">
+           <div class="section-header">
+             <span class="section-kicker">Top Recommendations</span>
+             <h2>Top Rated Specialists in D.I. Khan</h2>
+             <p>Book appointments with experienced healthcare professionals near you.</p>
+           </div>
+
+           <div class="doctor-filter" aria-label="Doctor categories">
+             <button class="filter-tab active" data-filter="all" type="button">All</button>
+             <button class="filter-tab" data-filter="cardiologists" type="button">Cardiologists</button>
+             <button class="filter-tab" data-filter="pediatricians" type="button">Pediatricians</button>
+             <button class="filter-tab" data-filter="gynecologists" type="button">Gynecologists</button>
+             <button class="filter-tab" data-filter="orthopedics" type="button">Orthopedics</button>
+           </div>
+
+           <div class="doctor-grid">
+             <article class="doctor-card reveal" data-category="cardiologists" data-doctor-name="Dr. Ahmad Khan" data-specialty="Cardiologist" data-clinic="Circular Road Clinic, D.I. Khan" data-area="Circular Road" data-fee="1500" data-image="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=700&q=80">
+               <div class="doctor-image-wrap">
+                 <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=700&q=80" alt="Dr. Ahmad Khan" />
+                 <span class="availability-badge">Available Today</span>
+               </div>
+               <div class="doctor-body">
+                 <div class="doctor-mainline">
+                   <div>
+                     <h3>Dr. Ahmad Khan</h3>
+                     <p>MBBS, FCPS</p>
+                   </div>
+                   <span class="rating">4.9 ★</span>
+                 </div>
+                 <p class="specialty">Cardiologist</p>
+                 <div class="meta-row">
+                   <span>📍 Circular Road Clinic, D.I. Khan</span>
+                 </div>
+                 <div class="meta-row">
+                   <span>🕒 04:00 PM - 08:00 PM</span>
+                 </div>
+                 <div class="card-footer">
+                   <strong>PKR 1,500</strong>
+                   <div class="cta-actions">
+                     <button type="button" class="btn btn-primary small-btn book-btn" data-doctor-name="Dr. Ahmad Khan">Book Appointment</button>
+                     <button type="button" class="view-profile-btn" data-doctor-name="Dr. Ahmad Khan">View Profile</button>
+                   </div>
+                 </div>
+               </div>
+             </article>
+
+             <article class="doctor-card reveal" data-category="pediatricians" data-doctor-name="Dr. Sana Bibi" data-specialty="Pediatrician" data-clinic="Zafarabad Medical Center" data-area="Zafarabad" data-fee="1200" data-image="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=700&q=80">
+               <div class="doctor-image-wrap">
+                 <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=700&q=80" alt="Dr. Sana Bibi" />
+                 <span class="availability-badge">Available Today</span>
+               </div>
+               <div class="doctor-body">
+                 <div class="doctor-mainline">
+                   <div>
+                     <h3>Dr. Sana Bibi</h3>
+                     <p>MBBS, MRCPCH</p>
+                   </div>
+                   <span class="rating">4.8 ★</span>
+                 </div>
+                 <p class="specialty">Pediatrician</p>
+                 <div class="meta-row">
+                   <span>📍 Zafarabad Medical Center</span>
+                 </div>
+                 <div class="meta-row">
+                   <span>🕒 11:00 AM - 03:00 PM</span>
+                 </div>
+                 <div class="card-footer">
+                   <strong>PKR 1,200</strong>
+                   <div class="cta-actions">
+                     <button type="button" class="btn btn-primary small-btn book-btn" data-doctor-name="Dr. Sana Bibi">Book Appointment</button>
+                     <button type="button" class="view-profile-btn" data-doctor-name="Dr. Sana Bibi">View Profile</button>
+                   </div>
+                 </div>
+               </div>
+             </article>
+
+             <article class="doctor-card reveal" data-category="gynecologists" data-doctor-name="Dr. Ayesha Ismail" data-specialty="Gynecologist" data-clinic="City Hospital D.I. Khan" data-area="City Hospital D.I. Khan" data-fee="1800" data-image="https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=700&q=80">
+               <div class="doctor-image-wrap">
+                 <img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=700&q=80" alt="Dr. Ayesha Ismail" />
+                 <span class="availability-badge">Available Today</span>
+               </div>
+               <div class="doctor-body">
+                 <div class="doctor-mainline">
+                   <div>
+                     <h3>Dr. Ayesha Ismail</h3>
+                     <p>MBBS, FCPS</p>
+                   </div>
+                   <span class="rating">4.9 ★</span>
+                 </div>
+                 <p class="specialty">Gynecologist</p>
+                 <div class="meta-row">
+                   <span>📍 City Hospital D.I. Khan</span>
+                 </div>
+                 <div class="meta-row">
+                   <span>🕒 02:00 PM - 06:00 PM</span>
+                 </div>
+                 <div class="card-footer">
+                   <strong>PKR 1,800</strong>
+                   <div class="cta-actions">
+                     <button type="button" class="btn btn-primary small-btn book-btn" data-doctor-name="Dr. Ayesha Ismail">Book Appointment</button>
+                     <button type="button" class="view-profile-btn" data-doctor-name="Dr. Ayesha Ismail">View Profile</button>
+                   </div>
+                 </div>
+               </div>
+             </article>
+
+             <article class="doctor-card reveal" data-category="orthopedics" data-doctor-name="Dr. Farhan Ali" data-specialty="Orthopedic Surgeon" data-clinic="Thall Road Clinic" data-area="Thall Road" data-fee="1700" data-image="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80">
+               <div class="doctor-image-wrap">
+                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80" alt="Dr. Farhan Ali" />
+                 <span class="availability-badge">Available Today</span>
+               </div>
+               <div class="doctor-body">
+                 <div class="doctor-mainline">
+                   <div>
+                     <h3>Dr. Farhan Ali</h3>
+                     <p>MBBS, MS Ortho</p>
+                   </div>
+                   <span class="rating">4.8 ★</span>
+                 </div>
+                 <p class="specialty">Orthopedic Surgeon</p>
+                 <div class="meta-row">
+                   <span>📍 Thall Road Clinic</span>
+                 </div>
+                 <div class="meta-row">
+                   <span>🕒 09:00 AM - 01:00 PM</span>
+                 </div>
+                 <div class="card-footer">
+                   <strong>PKR 1,700</strong>
+                   <div class="cta-actions">
+                     <button type="button" class="btn btn-primary small-btn book-btn" data-doctor-name="Dr. Farhan Ali">Book Appointment</button>
+                     <button type="button" class="view-profile-btn" data-doctor-name="Dr. Farhan Ali">View Profile</button>
+                   </div>
+                 </div>
+               </div>
+             </article>
+
+             <article class="doctor-card reveal" data-category="cardiologists" data-doctor-name="Dr. Hamza Raza" data-specialty="Cardiologist" data-clinic="City Hospital D.I. Khan" data-area="City Hospital D.I. Khan" data-fee="1600" data-image="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=700&q=80">
+               <div class="doctor-image-wrap">
+                 <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=700&q=80" alt="Dr. Hamza Raza" />
+                 <span class="availability-badge">Available Today</span>
+               </div>
+               <div class="doctor-body">
+                 <div class="doctor-mainline">
+                   <div>
+                     <h3>Dr. Hamza Raza</h3>
+                     <p>MBBS, FCPS</p>
+                   </div>
+                   <span class="rating">4.9 ★</span>
+                 </div>
+                 <p class="specialty">Cardiologist</p>
+                 <div class="meta-row">
+                   <span>📍 City Hospital D.I. Khan</span>
+                 </div>
+                 <div class="meta-row">
+                   <span>🕒 10:00 AM - 02:00 PM</span>
+                 </div>
+                 <div class="card-footer">
+                   <strong>PKR 1,600</strong>
+                   <div class="cta-actions">
+                     <button type="button" class="btn btn-primary small-btn book-btn" data-doctor-name="Dr. Hamza Raza">Book Appointment</button>
+                     <button type="button" class="view-profile-btn" data-doctor-name="Dr. Hamza Raza">View Profile</button>
+                   </div>
+                 </div>
+               </div>
+             </article>
+
+             <article class="doctor-card reveal" data-category="pediatricians" data-doctor-name="Dr. Maryam Noor" data-specialty="Pediatrician" data-clinic="Circular Road Clinic" data-area="Circular Road" data-fee="1350" data-image="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=700&q=80">
+               <div class="doctor-image-wrap">
+                 <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=700&q=80" alt="Dr. Maryam Noor" />
+                 <span class="availability-badge">Available Today</span>
+               </div>
+               <div class="doctor-body">
+                 <div class="doctor-mainline">
+                   <div>
+                     <h3>Dr. Maryam Noor</h3>
+                     <p>MBBS, MD</p>
+                   </div>
+                   <span class="rating">4.7 ★</span>
+                 </div>
+                 <p class="specialty">Pediatrician</p>
+                 <div class="meta-row">
+                   <span>📍 Circular Road Clinic</span>
+                 </div>
+                 <div class="meta-row">
+                   <span>🕒 01:00 PM - 05:00 PM</span>
+                 </div>
+                 <div class="card-footer">
+                   <strong>PKR 1,350</strong>
+                   <div class="cta-actions">
+                     <button type="button" class="btn btn-primary small-btn book-btn" data-doctor-name="Dr. Maryam Noor">Book Appointment</button>
+                     <button type="button" class="view-profile-btn" data-doctor-name="Dr. Maryam Noor">View Profile</button>
+                   </div>
+                 </div>
+               </div>
+             </article>
+           </div>
+         </div>
+        </section>
+
+        <div class="modal-overlay hidden" id="booking-modal" aria-hidden="true">
+         <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="booking-title">
+           <button type="button" class="close-modal" aria-label="Close appointment form">×</button>
+           <div class="modal-header">
+             <img id="modal-doctor-image" src="" alt="Selected doctor" />
+             <div>
+               <h3 id="booking-title">Dr. Ahmad Khan</h3>
+               <p id="booking-specialty">Cardiologist</p>
+               <span id="booking-clinic">Circular Road Clinic, D.I. Khan</span>
+             </div>
+           </div>
+
+           <form class="booking-form" id="appointment-form">
+             <div class="form-grid">
+               <label>
+                 <span>Patient Full Name</span>
+                 <input type="text" name="fullName" placeholder="Enter your full name" required />
+               </label>
+
+               <label>
+                 <span>Mobile Number / WhatsApp</span>
+                 <input type="tel" name="phone" placeholder="03xx-xxxxxxx" required />
+               </label>
+
+               <label>
+                 <span>Preferred Date</span>
+                 <input type="date" name="date" required />
+               </label>
+
+               <label>
+                 <span>Time Slot</span>
+                 <select name="timeSlot" required>
+                   <option value="">Select slot</option>
+                   <option>09:00 AM</option>
+                   <option>11:00 AM</option>
+                   <option>01:00 PM</option>
+                   <option>04:00 PM</option>
+                   <option>06:00 PM</option>
+                 </select>
+               </label>
+
+               <div class="gender-group">
+                 <span>Gender</span>
+                 <div class="radio-row">
+                   <label><input type="radio" name="gender" value="Male" checked /> Male</label>
+                   <label><input type="radio" name="gender" value="Female" /> Female</label>
+                 </div>
+               </div>
+
+               <label>
+                 <span>Appointment Type</span>
+                 <select name="appointmentType" required>
+                   <option value="In-Clinic Visit">In-Clinic Visit</option>
+                   <option value="Emergency">Emergency</option>
+                 </select>
+               </label>
+             </div>
+
+             <label class="full-width">
+               <span>Brief Description of Problem</span>
+               <textarea name="description" rows="4" placeholder="Describe your symptoms or concern"></textarea>
+             </label>
+
+             <div class="modal-footer">
+               <div class="fee-box">Total Fee: <strong>PKR <span id="booking-fee">1,500</span></strong></div>
+               <div class="modal-actions">
+                 <button type="button" class="btn btn-secondary close-modal-btn">Close</button>
+                 <button type="submit" class="btn btn-primary confirm-btn">Confirm Appointment</button>
+               </div>
+             </div>
+           </form>
+         </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="signin-modal" aria-hidden="true">
+          <div class="modal-panel modal-narrow" role="dialog" aria-modal="true" aria-labelledby="signin-title">
+            <button type="button" class="close-modal" aria-label="Close sign-in form">×</button>
+            <div class="modal-header single-header">
+              <div>
+                <span class="section-kicker alt small">Member Access</span>
+                <h3 id="signin-title">Sign In</h3>
+              </div>
+            </div>
+            <form id="signin-form" class="booking-form">
+              <div class="form-grid single-column">
+                <label>
+                  <span>Email Address</span>
+                  <input type="email" name="email" placeholder="name@example.com" required />
+                </label>
+                <label>
+                  <span>Password</span>
+                  <input type="password" name="password" placeholder="Enter your password" required />
+                </label>
+              </div>
+              <div class="modal-footer">
+                <div class="fee-box">Secure patient portal</div>
+                <div class="modal-actions">
+                  <button type="button" class="btn btn-secondary close-modal-btn">Cancel</button>
+                  <button type="submit" class="btn btn-primary">Sign In</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="doctor-details-modal" aria-hidden="true">
+          <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="doctor-profile-name">
+            <button type="button" class="close-modal" aria-label="Close doctor profile">×</button>
+            <div class="modal-header profile-header">
+              <img id="doctor-profile-image" src="" alt="Doctor profile" />
+              <div>
+                <h3 id="doctor-profile-name">Dr. Ahmad Khan</h3>
+                <p id="doctor-profile-specialty">Cardiologist</p>
+                <span id="doctor-profile-location">Circular Road Clinic, D.I. Khan</span>
+              </div>
+            </div>
+            <div class="profile-body">
+              <div class="profile-grid">
+                <div class="info-box">
+                  <h4>Qualifications</h4>
+                  <p id="doctor-profile-qualifications">MBBS, FCPS</p>
+                </div>
+                <div class="info-box">
+                  <h4>Consultation Fee</h4>
+                  <p id="doctor-profile-fee">PKR 1,500</p>
+                </div>
+                <div class="info-box">
+                  <h4>Timings</h4>
+                  <p id="doctor-profile-timings">04:00 PM - 08:00 PM</p>
+                </div>
+                <div class="info-box">
+                  <h4>Patient Rating</h4>
+                  <p id="doctor-profile-rating">4.9/5</p>
+                </div>
+              </div>
+              <div class="info-box full-box">
+                <h4>About the Doctor</h4>
+                <p id="doctor-profile-bio">Experienced cardiologist... </p>
+              </div>
+              <div class="info-box full-box">
+                <h4>Patient Reviews</h4>
+                <p id="doctor-profile-reviews">“Very professional and caring.”</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <div class="fee-box" id="doctor-profile-summary">Available in D.I. Khan</div>
+              <div class="modal-actions">
+                <button type="button" class="btn btn-secondary close-modal-btn">Close</button>
+                <button type="button" class="btn btn-primary book-profile-btn">Book Appointment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="specialties-modal" aria-hidden="true">
+          <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="specialties-modal-title">
+            <button type="button" class="close-modal" aria-label="Close all specialties">×</button>
+            <div class="modal-header single-header">
+              <div>
+                <span class="section-kicker alt small">Full Coverage</span>
+                <h3 id="specialties-modal-title">All Medical Specialties</h3>
+              </div>
+            </div>
+            <div id="all-specialties-list" class="all-specialties-list"></div>
+          </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="emergency-popup" aria-hidden="true">
+          <div class="modal-panel modal-narrow" role="dialog" aria-modal="true" aria-labelledby="emergency-popup-title">
+            <button type="button" class="close-modal" aria-label="Close emergency details">×</button>
+            <div class="modal-header single-header">
+              <div>
+                <span class="section-kicker alt small">Emergency</span>
+                <h3 id="emergency-popup-title">Emergency Support</h3>
+              </div>
+            </div>
+            <div class="profile-body">
+              <div class="info-box full-box">
+                <h4>DHQ D.I. Khan</h4>
+                <p><strong>Helpline:</strong> +92 300 1234567</p>
+                <p><strong>Address:</strong> District Headquarters Hospital, D.I. Khan</p>
+                <p><strong>Hours:</strong> 24/7 emergency care</p>
+              </div>
+              <div class="info-box full-box">
+                <h4>Nearest round-the-clock pharmacy</h4>
+                <ul class="modal-list">
+                  <li>City Care Pharmacy, Circular Road</li>
+                  <li>Life Plus Pharmacy, Zafarabad</li>
+                  <li>MedPlus 24, Cantonment</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="privacy-modal" aria-hidden="true">
+          <div class="modal-panel modal-narrow" role="dialog" aria-modal="true" aria-labelledby="privacy-title">
+            <button type="button" class="close-modal" aria-label="Close privacy policy">×</button>
+            <div class="modal-header single-header">
+              <div>
+                <span class="section-kicker alt small">Legal</span>
+                <h3 id="privacy-title">Privacy Policy</h3>
+              </div>
+            </div>
+            <div class="profile-body">
+              <div class="info-box full-box">
+                <p>Doctor Q respects patient confidentiality and only stores appointment information needed to manage care. We do not share your contact details with third parties without consent.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="app-toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+        <section class="emergency-footer" id="emergency-footer">
+          <div class="container">
+            <div class="emergency-banner">
+              <div class="emergency-copy">
+                <span class="section-kicker alt">Urgent Care</span>
+                <h2>24/7 Medical Emergency Support in D.I. Khan</h2>
+              </div>
+              <div class="emergency-actions">
+                <a href="tel:+923001234567" class="emergency-link ambulance-link">
+                  <span class="mini-icon">🚑</span>
+                  Ambulance
+                </a>
+                <button type="button" class="emergency-link emergency-detail-btn" data-modal-target="emergency-popup">
+                  <span class="mini-icon">🏥</span>
+                  DHQ Emergency Desk
+                </button>
+                <button type="button" class="emergency-link pharmacy-btn" data-modal-target="emergency-popup">
+                  <span class="mini-icon">💊</span>
+                  24/7 Pharmacy
+                </button>
+              </div>
+            </div>
+
+            <footer class="footer-shell">
+              <div class="footer-grid">
+                <div class="footer-column brand-column">
+                  <div class="brand footer-brand" aria-label="Doctor Q logo and brand name">
+                    <div class="brand-mark">
+                      <span class="cross"></span>
+                    </div>
+                    <div class="brand-text">
+                      <span class="brand-name">Doctor Q</span>
+                    </div>
+                  </div>
+                  <p>D.I. Khan's primary online healthcare network.</p>
+                  <div class="social-links" aria-label="Social media links">
+                    <a href="#" aria-label="Facebook">f</a>
+                    <a href="#" aria-label="Instagram">◎</a>
+                    <a href="#" aria-label="X">x</a>
+                  </div>
+                </div>
+
+                <div class="footer-column">
+                  <h3>Top Local Areas</h3>
+                  <ul>
+                    <li><button type="button" class="footer-area-link" data-area="Circular Road">Circular Road</button></li>
+                    <li><button type="button" class="footer-area-link" data-area="Thall Road">Thall Road</button></li>
+                    <li><button type="button" class="footer-area-link" data-area="Zafarabad">Zafarabad</button></li>
+                    <li><button type="button" class="footer-area-link" data-area="Cantonment">Cantonment</button></li>
+                  </ul>
+                </div>
+
+                <div class="footer-column">
+                  <h3>Quick Links</h3>
+                  <ul>
+                    <li><button type="button" class="footer-link" data-scroll-target="top">Home</button></li>
+                    <li><button type="button" class="footer-link" data-scroll-target="specialty-section">Specialties</button></li>
+                    <li><button type="button" class="footer-link" data-scroll-target="doctor-listings">Top Doctors</button></li>
+                    <li><button type="button" class="footer-link" data-scroll-target="emergency-footer">Emergency Contacts</button></li>
+                    <li><button type="button" class="footer-link" data-modal-target="privacy-modal">Privacy Policy</button></li>
+                  </ul>
+                </div>
+
+                <div class="footer-column">
+                  <h3>Contact Us</h3>
+                  <ul>
+                    <li>WhatsApp: +92 300 1234567</li>
+                    <li>Email: care@doctorq.pk</li>
+                    <li>Office: D.I. Khan, Khyber Pakhtunkhwa</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="copyright-bar">
+                © 2026 Doctor Q. All Rights Reserved. Built for D.I. Khan.
+              </div>
+            </footer>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
