@@ -588,8 +588,25 @@
                 <h3 id="signin-title">Sign In</h3>
               </div>
             </div>
-            <form id="signin-form" class="booking-form">
+
+            <div class="auth-role-tabs" aria-label="Select account role">
+              <button type="button" class="auth-role-tab active" data-role="Patient">Patient</button>
+              <button type="button" class="auth-role-tab" data-role="Doctor">Doctor</button>
+              <button type="button" class="auth-role-tab" data-role="Admin">Admin</button>
+            </div>
+
+            <form id="signin-form" class="booking-form auth-form">
               <div class="form-grid single-column">
+                <label class="auth-field auth-field-signup hidden">
+                  <span>Full Name</span>
+                  <input type="text" name="fullName" placeholder="Enter full name" />
+                </label>
+
+                <label class="auth-field auth-field-signup hidden">
+                  <span>Phone Number</span>
+                  <input type="tel" name="phoneNumber" placeholder="03xx-xxxxxxx" />
+                </label>
+
                 <label>
                   <span>Email Address</span>
                   <input type="email" name="email" placeholder="name@example.com" required />
@@ -599,11 +616,15 @@
                   <input type="password" name="password" placeholder="Enter your password" required />
                 </label>
               </div>
+              <div class="auth-switch-row">
+                <span class="auth-switch-text">Don't have an account?</span>
+                <button type="button" class="auth-switch-btn" id="auth-mode-toggle">Sign Up</button>
+              </div>
               <div class="modal-footer">
-                <div class="fee-box">Secure patient portal</div>
+                <div class="fee-box" id="auth-portal-label">Secure patient portal</div>
                 <div class="modal-actions">
                   <button type="button" class="btn btn-secondary close-modal-btn">Cancel</button>
-                  <button type="submit" class="btn btn-primary">Sign In</button>
+                  <button type="submit" class="btn btn-primary" id="auth-submit-btn">Sign In</button>
                 </div>
               </div>
             </form>

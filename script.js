@@ -7,6 +7,8 @@ const state = {
   specialtiesExpanded: false,
   doctors: [],
   loadingDoctors: false,
+  activeAuthRole: 'Patient',
+  authMode: 'signin',
 };
 
 const specialtyCatalog = [
@@ -123,6 +125,54 @@ const showToast = (message, type = 'success') => {
   }, 2600);
 };
 
+const updateAuthRoleUI = () => {
+  document.querySelectorAll('.auth-role-tab').forEach((tab) => {
+    const isActive = tab.dataset.role === state.activeAuthRole;
+    tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-pressed', String(isActive));
+  });
+
+  const portalLabel = document.getElementById('auth-portal-label');
+  if (portalLabel) {
+    const portalText = state.activeAuthRole === 'Admin' ? 'Secure admin portal' : state.activeAuthRole === 'Doctor' ? 'Secure doctor portal' : 'Secure patient portal';
+    portalLabel.textContent = portalText;
+  }
+};
+
+const updateAuthFormMode = () => {
+  const isSignup = state.authMode === 'signup';
+  const submitButton = document.getElementById('auth-submit-btn');
+  const modeToggle = document.getElementById('auth-mode-toggle');
+  const title = document.getElementById('signin-title');
+
+  document.querySelectorAll('.auth-field-signup').forEach((field) => {
+    field.classList.toggle('hidden', !isSignup);
+    const input = field.querySelector('input');
+    if (input) {
+      input.required = isSignup;
+    }
+  });
+
+  if (submitButton) {
+    submitButton.textContent = isSignup ? 'Create Account' : 'Sign In';
+  }
+
+  if (modeToggle) {
+    modeToggle.textContent = isSignup ? 'Sign In' : 'Sign Up';
+  }
+
+  if (title) {
+    title.textContent = isSignup ? 'Sign Up' : 'Sign In';
+  }
+
+  const switchText = document.querySelector('.auth-switch-text');
+  if (switchText) {
+    switchText.textContent = isSignup ? 'Already have an account?' : "Don't have an account?";
+  }
+
+  updateAuthRoleUI();
+};
+
 const scrollToSection = (sectionId) => {
   const section = document.getElementById(sectionId);
   if (section) {
@@ -133,6 +183,13 @@ const scrollToSection = (sectionId) => {
 const openModalById = (id) => {
   const modal = document.getElementById(id);
   if (!modal) return;
+
+  if (id === 'signin-modal') {
+    state.authMode = 'signin';
+    state.activeAuthRole = 'Patient';
+    updateAuthFormMode();
+  }
+
   modal.classList.remove('hidden');
   modal.setAttribute('aria-hidden', 'false');
 };
@@ -674,6 +731,19 @@ const setupModals = () => {
   const appointmentForm = document.getElementById('appointment-form');
   const signInForm = document.getElementById('signin-form');
 
+  document.querySelectorAll('.auth-role-tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      state.activeAuthRole = tab.dataset.role || 'Patient';
+      updateAuthRoleUI();
+    });
+  });
+
+  const authModeToggle = document.getElementById('auth-mode-toggle');
+  authModeToggle?.addEventListener('click', () => {
+    state.authMode = state.authMode === 'signin' ? 'signup' : 'signin';
+    updateAuthFormMode();
+  });
+
   appointmentForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     const submitButton = appointmentForm.querySelector('.confirm-btn');
@@ -732,11 +802,55 @@ const setupModals = () => {
     }
   });
 
-  signInForm?.addEventListener('submit', (event) => {
+  signInForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
-    showToast('Signed in successfully');
-    closeModalById('signin-modal');
-    signInForm.reset();
+    const submitButton = signInForm.querySelector('#auth-submit-btn');
+    const originalText = submitButton?.textContent || 'Submit';
+    const isSignup = state.authMode === 'signup';
+    const formData = new FormData(signInForm);
+    const payload = {
+      role: String(state.activeAuthRole).toLowerCase(),
+      email: formData.get('email') || '',
+      password: formData.get('password') || '',
+    };
+
+    if (isSignup) {
+      payload.fullName = formData.get('fullName') || '';
+      payload.phoneNumber = formData.get('phoneNumber') || '';
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = isSignup ? 'Creating Account...' : 'Signing In...';
+
+    try {
+      const endpoint = isSignup ? `${API_BASE_URL}/auth/register` : `${API_BASE_URL}/auth/login`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(result.message || `Unable to ${isSignup ? 'create account' : 'sign in'} right now.`);
+      }
+
+      showToast(result.message || (isSignup ? 'Account created successfully.' : 'Signed in successfully.'));
+      closeModalById('signin-modal');
+      signInForm.reset();
+      state.authMode = 'signin';
+      updateAuthFormMode();
+    } catch (error) {
+      showToast(error.message || 'Authentication failed.', 'error');
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+      }
+    }
   });
 };
 
@@ -845,6 +959,7 @@ const init = async () => {
   setupFooterActions();
   setupAreaCards();
   setupSpecialtyModal();
+  updateAuthFormMode();
   setFilterSelection('all');
 
   try {
